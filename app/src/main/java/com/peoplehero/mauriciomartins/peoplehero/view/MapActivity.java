@@ -1,20 +1,24 @@
 package com.peoplehero.mauriciomartins.peoplehero.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.peoplehero.mauriciomartins.peoplehero.R;
 import com.peoplehero.mauriciomartins.peoplehero.contract.Map;
+import com.peoplehero.mauriciomartins.peoplehero.model.domain.Helpless;
 import com.peoplehero.mauriciomartins.peoplehero.presenter.MapPresenter;
+
+import java.util.List;
 
 public class MapActivity extends AbstractActivity  implements  Map.View{
     private Map.Presenter presenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
         this.presenter = new MapPresenter(this);
+        super.onCreate(savedInstanceState);
     }
 
 
@@ -23,20 +27,23 @@ public class MapActivity extends AbstractActivity  implements  Map.View{
     }
 
     public void refreshClick(View view){
-        this.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-        this.presenter.refresh(123456L, 654321L);
+        this.showProgress(true);
+        this.presenter.refresh(123456L, 654321L,12L);
     }
 
     public void helpClick(View view){
-        this.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        this.showProgress(true);
         this.presenter.setHelpAsk(123456L, 654321L);
     }
 
 
-
     @Override
-    public void showMessage(String message) {
-        this.findViewById(R.id.progressBar).setVisibility(View.GONE);
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    public void updateHelpless(List<Helpless> helpList) {
+        if(helpList!=null){
+            for(Helpless help:helpList){
+                Log.i("Helpless List","Helpless"+help);
+            }
+        }
+        this.showProgress(false);
     }
 }

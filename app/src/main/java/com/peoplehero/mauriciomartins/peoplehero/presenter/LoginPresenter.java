@@ -4,6 +4,7 @@ package com.peoplehero.mauriciomartins.peoplehero.presenter;
 import android.util.Log;
 
 import com.peoplehero.mauriciomartins.peoplehero.contract.Login;
+import com.peoplehero.mauriciomartins.peoplehero.model.domain.User;
 import com.peoplehero.mauriciomartins.peoplehero.model.service.PeopleHeroService;
 import com.peoplehero.mauriciomartins.peoplehero.presenter.interactor.LoginInteractor;
 
@@ -25,9 +26,20 @@ public class LoginPresenter implements Login.Presenter {
         this.view = view;
         this.interactor = new LoginInteractor(this);
     }
-    @Override
-    public void login() {
-        this.interactor.login();
 
+
+    @Override
+    public void login(Long uid, String nome, String email, String urlimage) {
+        this.interactor.login(uid, nome, email, urlimage);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        this.view.showMessage(message);
+    }
+
+    @Override
+    public void setUser(User user) {
+        this.view.connectToFacebook(user);
     }
 }

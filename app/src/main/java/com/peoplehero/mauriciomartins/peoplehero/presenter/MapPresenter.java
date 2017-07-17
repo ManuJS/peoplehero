@@ -1,10 +1,11 @@
 package com.peoplehero.mauriciomartins.peoplehero.presenter;
 
 
-import com.peoplehero.mauriciomartins.peoplehero.contract.Login;
 import com.peoplehero.mauriciomartins.peoplehero.contract.Map;
-import com.peoplehero.mauriciomartins.peoplehero.presenter.interactor.LoginInteractor;
+import com.peoplehero.mauriciomartins.peoplehero.model.domain.Helpless;
 import com.peoplehero.mauriciomartins.peoplehero.presenter.interactor.MapInteractor;
+
+import java.util.List;
 
 /**
  * Created by mauriciomartins on 15/07/17.
@@ -29,7 +30,12 @@ public class MapPresenter implements Map.Presenter {
     }
 
     @Override
-    public void refresh(Long latitude, Long longitude) {
-        this.interactor.refresh(latitude,longitude);
+    public void refresh(Long latitude, Long longitude,Long idUser) {
+        this.interactor.refresh(latitude,longitude,idUser);
+    }
+
+    @Override
+    public void updateHelpless(List<Helpless> help) {
+        this.view.updateHelpless(help);
     }
 }

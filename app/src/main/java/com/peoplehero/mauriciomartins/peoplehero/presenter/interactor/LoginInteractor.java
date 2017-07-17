@@ -1,7 +1,16 @@
 package com.peoplehero.mauriciomartins.peoplehero.presenter.interactor;
 
+import android.util.Log;
+
 import com.peoplehero.mauriciomartins.peoplehero.contract.Login;
+import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelpDTO;
+import com.peoplehero.mauriciomartins.peoplehero.model.dto.UserDTO;
+import com.peoplehero.mauriciomartins.peoplehero.model.service.PeopleHeroService;
 import com.peoplehero.mauriciomartins.peoplehero.presenter.LoginPresenter;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -17,7 +26,28 @@ public class LoginInteractor implements Login.Interactor {
     }
 
     @Override
-    public void login() {
+    public void login(Long uid, String nome, String email,String urlimage) {
+        PeopleHeroService peopleHeroService = new PeopleHeroService();
+        Call<UserDTO> repos = peopleHeroService.setLogin(uid, nome, email,urlimage);
+        repos.enqueue(new Callback<UserDTO>() {
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
 
+                if(response!=null&&response.raw()!=null&& response.raw().code()==200){
+                    UserDTO user = response.body();
+                    presenter.setUser(user.getUser());
+                }
+                else{
+                    Log.i("Retrofit Service","Erro : "+response.raw().code());
+                    presenter.showMessage("Retrofit Service - Erro : "+response.raw().code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
+                Log.i("Retrofit Service","Response:"+t.getMessage());
+                presenter.showMessage("Retrofit Service - Response:"+t.getMessage());
+            }
+        });
     }
 }

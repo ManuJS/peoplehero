@@ -2,11 +2,11 @@ package com.peoplehero.mauriciomartins.peoplehero.presenter.interactor;
 
 import android.util.Log;
 
-import com.peoplehero.mauriciomartins.peoplehero.contract.Login;
 import com.peoplehero.mauriciomartins.peoplehero.contract.Map;
+import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelpDTO;
+import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelplessListDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.service.PeopleHeroService;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,14 +27,14 @@ public class MapInteractor implements Map.Interactor {
     @Override
     public void setHelpAsk(Long latitude, Long longitude) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
-        Call<ResponseBody> repos = peopleHeroService.setHelpAsk(latitude,longitude);
-        repos.enqueue(new Callback<ResponseBody>() {
+        Call<HelpDTO> repos = peopleHeroService.setHelpAsk(latitude,longitude);
+        repos.enqueue(new Callback<HelpDTO>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<HelpDTO> call, Response<HelpDTO> response) {
 
                 if(response!=null&&response.raw()!=null&& response.raw().code()==200){
-                    Log.i("Retrofit Service","Sucesso");
-                    presenter.showMessage("Retrofit Service - Sucesso");
+                    HelpDTO help = response.body();
+                    presenter.showMessage("Ajuda realizada com sucesso!!!");
                 }
                 else{
                     Log.i("Retrofit Service","Erro : "+response.raw().code());
@@ -43,7 +43,7 @@ public class MapInteractor implements Map.Interactor {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<HelpDTO> call, Throwable t) {
                 Log.i("Retrofit Service","Response:"+t.getMessage());
                 presenter.showMessage("Retrofit Service - Response:"+t.getMessage());
             }
@@ -51,25 +51,25 @@ public class MapInteractor implements Map.Interactor {
     }
 
     @Override
-    public void refresh(Long latitude, Long longitude) {
+    public void refresh(Long latitude, Long longitude,Long idUser) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
-        Call<ResponseBody> repos = peopleHeroService.setHelpAsk(latitude,longitude);
-        repos.enqueue(new Callback<ResponseBody>() {
+        Call<HelplessListDTO> repos = peopleHeroService.setHelp(latitude,longitude,idUser);
+
+        repos.enqueue(new Callback<HelplessListDTO>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<HelplessListDTO> call, Response<HelplessListDTO> response) {
 
                 if(response!=null&&response.raw()!=null&& response.raw().code()==200){
-                    Log.i("Retrofit Service","Sucesso");
-                    presenter.showMessage("Retrofit Service - Sucesso");
+                    HelplessListDTO help = (HelplessListDTO) response.body();
+                    presenter.updateHelpless(help.getHelp());
                 }
                 else{
-                    Log.i("Retrofit Service","Erro : "+response.raw().code());
                     presenter.showMessage("Retrofit Service - Erro : "+response.raw().code());
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<HelplessListDTO> call, Throwable t) {
                 Log.i("Retrofit Service","Response:"+t.getMessage());
                 presenter.showMessage("Retrofit Service - Response:"+t.getMessage());
             }
