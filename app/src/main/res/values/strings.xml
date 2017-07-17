@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">People Hero</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBWofLee10d5hV1MYUrmECF8o3EXgfz8fE</string>
 </resources>

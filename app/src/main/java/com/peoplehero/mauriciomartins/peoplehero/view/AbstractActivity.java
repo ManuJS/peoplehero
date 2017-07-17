@@ -3,6 +3,7 @@ package com.peoplehero.mauriciomartins.peoplehero.view;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -10,7 +11,7 @@ import android.widget.Toast;
 
 import com.peoplehero.mauriciomartins.peoplehero.R;
 
-public class AbstractActivity extends AppCompatActivity {
+public class AbstractActivity extends FragmentActivity {
     private ProgressBar progressBar;
 
 
