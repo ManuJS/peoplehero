@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Marker;
 import com.peoplehero.mauriciomartins.peoplehero.R;
 import com.peoplehero.mauriciomartins.peoplehero.contract.Map;
 import com.peoplehero.mauriciomartins.peoplehero.model.domain.Helpless;
@@ -22,7 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
-public class MapActivity extends AbstractActivity  implements  Map.View ,OnMapReadyCallback{
+public class MapActivity extends AbstractActivity  implements  Map.View ,OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
     private Map.Presenter presenter;
     private GoogleMap mMap;
     @Override
@@ -62,7 +63,8 @@ public class MapActivity extends AbstractActivity  implements  Map.View ,OnMapRe
                LatLng here = new LatLng(Double.valueOf(help.getLatitude()),Double.valueOf(help.getLongitude()));
 //                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.app_icon);
 //                BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-                mMap.addMarker(new MarkerOptions().position(here).title(getString(R.string.help_here)).flat(true));
+                Marker helplessMarker = mMap.addMarker(new MarkerOptions().position(here).title(getString(R.string.help_here)).flat(true).anchor(0.5f, 0.5f));
+                helplessMarker.setTag(Integer.valueOf(help.getIdmendingo()));
             }
             LatLng here = new LatLng(-23.5538477,-46.6496773);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
@@ -89,5 +91,23 @@ public class MapActivity extends AbstractActivity  implements  Map.View ,OnMapRe
         BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
         mMap.addMarker(new MarkerOptions().position(here).icon(icon).title(getString(R.string.im_here)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
+        mMap.setOnMarkerClickListener(this);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        // Retrieve the data from the marker.
+        Integer clickCount = (Integer) marker.getTag();
+
+        // Check if a click count was set, then display the click count.
+        if (clickCount != null) {
+            this.presenter.set
+            Toast.makeText(this,
+                    marker.getTitle() +
+                            " Marker " + clickCount + " clicked.",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        return false;
     }
 }

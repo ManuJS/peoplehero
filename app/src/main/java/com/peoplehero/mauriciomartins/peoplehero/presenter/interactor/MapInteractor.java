@@ -24,6 +24,33 @@ public class MapInteractor implements Map.Interactor {
         this.presenter = presenter;
     }
 
+
+    @Override
+    public void refresh(Long latitude, Long longitude,Long idUser) {
+        PeopleHeroService peopleHeroService = new PeopleHeroService();
+        Call<HelplessListDTO> repos = peopleHeroService.setHelp(latitude,longitude,idUser);
+
+        repos.enqueue(new Callback<HelplessListDTO>() {
+            @Override
+            public void onResponse(Call<HelplessListDTO> call, Response<HelplessListDTO> response) {
+
+                if(response!=null&&response.raw()!=null&& response.raw().code()==200){
+                    HelplessListDTO help = (HelplessListDTO) response.body();
+                    presenter.updateHelpless(help.getHelp());
+                }
+                else{
+                    presenter.showMessage("Retrofit Service - Erro : "+response.raw().code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<HelplessListDTO> call, Throwable t) {
+                Log.i("Retrofit Service","Response:"+t.getMessage());
+                presenter.showMessage("Retrofit Service - Response:"+t.getMessage());
+            }
+        });
+    }
+
     @Override
     public void setHelpAsk(Long latitude, Long longitude) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
@@ -51,25 +78,25 @@ public class MapInteractor implements Map.Interactor {
     }
 
     @Override
-    public void refresh(Long latitude, Long longitude,Long idUser) {
+    public void confirmHelp(Long latitude, Long longitude, Long idUser) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
-        Call<HelplessListDTO> repos = peopleHeroService.setHelp(latitude,longitude,idUser);
-
-        repos.enqueue(new Callback<HelplessListDTO>() {
+        Call<HelpDTO> repos = peopleHeroService.setHelpAsk(latitude,longitude);
+        repos.enqueue(new Callback<HelpDTO>() {
             @Override
-            public void onResponse(Call<HelplessListDTO> call, Response<HelplessListDTO> response) {
+            public void onResponse(Call<HelpDTO> call, Response<HelpDTO> response) {
 
                 if(response!=null&&response.raw()!=null&& response.raw().code()==200){
-                    HelplessListDTO help = (HelplessListDTO) response.body();
-                    presenter.updateHelpless(help.getHelp());
+                    HelpDTO help = response.body();
+                    presenter.showMessage("Ajuda realizada com sucesso!!!");
                 }
                 else{
+                    Log.i("Retrofit Service","Erro : "+response.raw().code());
                     presenter.showMessage("Retrofit Service - Erro : "+response.raw().code());
                 }
             }
 
             @Override
-            public void onFailure(Call<HelplessListDTO> call, Throwable t) {
+            public void onFailure(Call<HelpDTO> call, Throwable t) {
                 Log.i("Retrofit Service","Response:"+t.getMessage());
                 presenter.showMessage("Retrofit Service - Response:"+t.getMessage());
             }

@@ -26,5 +26,7 @@ public interface Map {
         void setHelpAsk(Long latitude, Long longitude);
 
         void refresh(Long latitude, Long longitude,Long idUser);
+
+        void confirmHelp(Long latitude, Long longitude, Long idUser);
     }
 }
