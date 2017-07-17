@@ -3,6 +3,7 @@ package com.peoplehero.mauriciomartins.peoplehero.presenter.interactor;
 import android.util.Log;
 
 import com.peoplehero.mauriciomartins.peoplehero.contract.Login;
+import com.peoplehero.mauriciomartins.peoplehero.model.domain.User;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelpDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.UserDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.service.PeopleHeroService;
@@ -29,6 +30,13 @@ public class LoginInteractor implements Login.Interactor {
     public void login(Long uid, String nome, String email,String urlimage) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
         Call<UserDTO> repos = peopleHeroService.setLogin(uid, nome, email,urlimage);
+        User user = new User();
+        user.setUid(uid);
+        user.setEmail(email);
+        user.setNome(nome);
+        user.setUrlimage(urlimage);
+//        Call<UserDTO> repos = peopleHeroService.setLogin(user);
+
         repos.enqueue(new Callback<UserDTO>() {
             @Override
             public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {

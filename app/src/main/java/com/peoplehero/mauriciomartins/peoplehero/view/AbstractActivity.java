@@ -14,10 +14,9 @@ import com.peoplehero.mauriciomartins.peoplehero.R;
 public class AbstractActivity extends FragmentActivity {
     private ProgressBar progressBar;
 
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onStart() {
+        super.onStart();
         progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
         if(progressBar!=null) {
             progressBar.setIndeterminate(true);

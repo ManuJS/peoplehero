@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.peoplehero.mauriciomartins.peoplehero.R;
 import com.peoplehero.mauriciomartins.peoplehero.contract.Map;
 import com.peoplehero.mauriciomartins.peoplehero.model.domain.Helpless;
@@ -27,6 +29,7 @@ public class MapActivity extends AbstractActivity  implements  Map.View ,OnMapRe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -54,10 +57,15 @@ public class MapActivity extends AbstractActivity  implements  Map.View ,OnMapRe
 
     @Override
     public void updateHelpless(List<Helpless> helpList) {
-        if(helpList!=null){
+        if(helpList!=null&&this.mMap!=null){
             for(Helpless help:helpList){
-                Log.i("Helpless List","Helpless"+help);
+               LatLng here = new LatLng(Double.valueOf(help.getLatitude()),Double.valueOf(help.getLongitude()));
+//                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.app_icon);
+//                BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                mMap.addMarker(new MarkerOptions().position(here).title(getString(R.string.help_here)).flat(true));
             }
+            LatLng here = new LatLng(-23.5538477,-46.6496773);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
         }
         this.showProgress(false);
     }
@@ -74,10 +82,12 @@ public class MapActivity extends AbstractActivity  implements  Map.View ,OnMapRe
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.setMinZoomPreference(13.0f);
+        mMap.setMaxZoomPreference(16.0f);
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng here = new LatLng(-23.5538477,-46.6496773);
+        BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+        mMap.addMarker(new MarkerOptions().position(here).icon(icon).title(getString(R.string.im_here)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
     }
 }

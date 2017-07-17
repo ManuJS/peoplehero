@@ -9,6 +9,7 @@ public class User {
     private String nome;
     private String email;
     private String urlimage;
+    private Long uid;
 
     public String getNome() {
         return nome;
@@ -49,6 +50,10 @@ public class User {
                 ", nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
     }
 }
 

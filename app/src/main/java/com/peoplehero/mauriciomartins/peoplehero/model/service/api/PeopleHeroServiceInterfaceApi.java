@@ -1,11 +1,15 @@
 package com.peoplehero.mauriciomartins.peoplehero.model.service.api;
 
+import com.peoplehero.mauriciomartins.peoplehero.model.domain.User;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelpDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelplessListDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.UserDTO;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -15,8 +19,13 @@ import retrofit2.http.Query;
 
 public interface PeopleHeroServiceInterfaceApi {
 
+
     @POST("setLogin.php")
     Call<UserDTO> setLogin(@Query("uid") Long uid, @Query("nome") String nome, @Query("email") String email, @Query("urlimage") String urlimage);
+
+    @Headers("Content-Type: application/json")
+    @POST("setLogin.php")
+    Call<UserDTO> setLoginBody(@Body User user);
 
     @POST("setHelp.php")
     Call<HelplessListDTO> setHelp(@Query("latitude") Long latitude, @Query("longitude") Long longitude, @Query("iduser") Long iduser);

@@ -21,8 +21,9 @@ public class LoginActivity extends AbstractActivity implements Login.View {
     }
 
     public void fbClick(View view){
-        this.showProgress(true);
-        this.presenter.login(12345L,"MSM","mrs@gmail.com","http://www.peoplehero.com.br/mendigo.png");
+//        this.showProgress(true);
+//        this.presenter.login(12345L,"MSM","mrs@gmail.com","http://www.peoplehero.com.br/mendigo.png");
+        this.connectToFacebook(null);
     }
 
     @Override
