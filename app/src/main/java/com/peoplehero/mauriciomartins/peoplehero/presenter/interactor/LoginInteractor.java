@@ -25,10 +25,10 @@ public class LoginInteractor implements Login.Interactor {
     }
 
     @Override
-    public void login(Long uid, String nome, String email,String urlimage) {
+    public void login(String uid, String nome, String email, String urlimage) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
         User user = new User();
-        user.setUid(String.valueOf(uid));
+        user.setUid(uid);
         user.setEmail(email);
         user.setNome(nome);
         user.setUrlimage(urlimage);

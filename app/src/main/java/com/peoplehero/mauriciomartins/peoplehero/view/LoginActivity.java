@@ -1,7 +1,12 @@
 package com.peoplehero.mauriciomartins.peoplehero.view;
 
+import android.app.backup.BackupManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -11,7 +16,12 @@ import com.peoplehero.mauriciomartins.peoplehero.contract.Login;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.UserDTO;
 import com.peoplehero.mauriciomartins.peoplehero.presenter.LoginPresenter;
 
+import java.util.UUID;
+
 public class LoginActivity extends AbstractActivity implements Login.View {
+    private static final String PREFS = "PEOPLE_HERO";
+    private static String uniqueID = null;
+    private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
     private Login.Presenter presenter;
 
     @Override
@@ -23,7 +33,8 @@ public class LoginActivity extends AbstractActivity implements Login.View {
 
     public void fbClick(View view){
         this.showProgress(true);
-        this.presenter.login(1234567890L,"MSM","mrs@gmail.com","http://www.peoplehero.com.br/mendigo.png");
+        final String UID =  this.getUserID(this);
+        this.presenter.login(UID,"MSM","mrs@gmail.com","http://www.peoplehero.com.br/mendigo.png");
     }
 
     @Override
@@ -42,5 +53,28 @@ public class LoginActivity extends AbstractActivity implements Login.View {
         intent.putExtra(MapActivity.UID,user.getUid());
         startActivity(intent);
         this.finish();
+    }
+
+
+    public  String getUserID(Context context) {
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        uniqueID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);//telephonyManager.getDeviceId();
+//        if (uniqueID == null) {
+//            SharedPreferences sharedPrefs = context.getSharedPreferences(
+//                    LoginActivity.PREFS, Context.MODE_PRIVATE);
+//            uniqueID = sharedPrefs.getString(PREF_UNIQUE_ID, null);
+//            if (uniqueID == null) {
+//                uniqueID = UUID.randomUUID().toString();
+//                SharedPreferences.Editor editor = sharedPrefs.edit();
+//                editor.putString(PREF_UNIQUE_ID, uniqueID);
+//                editor.commit();
+//
+//                //backup the changes
+//                BackupManager mBackupManager = new BackupManager(context);
+//                mBackupManager.dataChanged();
+//            }
+//        }
+
+        return uniqueID;
     }
 }

@@ -15,12 +15,12 @@ public interface Login {
     }
 
     static interface Presenter{
-        void login(Long uid, String nome, String email,String urlimage);
+        void login(String uid, String nome, String email, String urlimage);
         void showMessage(String message);
         void setUser(UserDTO user);
     }
 
     static interface Interactor{
-        void login(Long uid, String nome, String email,String urlimage);
+        void login(String uid, String nome, String email, String urlimage);
     }
 }

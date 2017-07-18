@@ -19,7 +19,7 @@ public class LoginPresenter implements Login.Presenter {
 
 
     @Override
-    public void login(Long uid, String nome, String email, String urlimage) {
+    public void login(String uid, String nome, String email, String urlimage) {
         this.interactor.login(uid, nome, email, urlimage);
     }
 
