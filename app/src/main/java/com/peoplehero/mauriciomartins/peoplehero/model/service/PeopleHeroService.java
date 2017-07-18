@@ -1,7 +1,6 @@
 package com.peoplehero.mauriciomartins.peoplehero.model.service;
 
-import android.util.Log;
-
+import com.peoplehero.mauriciomartins.peoplehero.model.domain.Helpless;
 import com.peoplehero.mauriciomartins.peoplehero.model.domain.User;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelpDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelplessListDTO;
@@ -36,14 +35,13 @@ public class PeopleHeroService {
         return repos;
     }
 
-    public Call<UserDTO> setLogin(Long uid, String nome, String email,String urlimage){
-        Call<UserDTO> repos = service.setLogin(uid, nome, email,urlimage);
+    public Call<UserDTO> setLogin(User user){
+        Call<UserDTO> repos = service.setLogin(user);
         return repos;
     }
 
-    public Call<UserDTO> setLogin(User user){
-        Log.i("Login","Üser"+user);
-        Call<UserDTO> repos = service.setLoginBody(user);
+    public Call<Helpless> confirmHelp(Helpless helpless){
+        Call<Helpless> repos = service.confirmHelp(helpless);
         return repos;
     }
 }

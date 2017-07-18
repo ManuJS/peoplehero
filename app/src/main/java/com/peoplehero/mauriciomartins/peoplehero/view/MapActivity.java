@@ -96,16 +96,10 @@ public class MapActivity extends AbstractActivity  implements  Map.View ,OnMapRe
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        // Retrieve the data from the marker.
-        Integer clickCount = (Integer) marker.getTag();
-
-        // Check if a click count was set, then display the click count.
+        final Integer clickCount = (Integer) marker.getTag();
         if (clickCount != null) {
-
-            Toast.makeText(this,
-                    marker.getTitle() +
-                            " Marker " + clickCount + " clicked.",
-                    Toast.LENGTH_SHORT).show();
+            this.showProgress(true);
+            this.presenter.confirmHelp(String.valueOf(clickCount),"154");
         }
 
         return false;

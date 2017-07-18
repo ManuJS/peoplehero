@@ -9,8 +9,8 @@ public class User {
     private String nome;
     private String email;
     private String urlimage;
-    private String STATUS;
-    private String UID;
+    private String status;
+    private String uid;
 
     public String getNome() {
         return nome;
@@ -44,16 +44,16 @@ public class User {
         this.urlimage = urlimage;
     }
 
-    public String getSTATUS() {
-        return STATUS;
+    public String getStatus() {
+        return status;
     }
 
-    public void setSTATUS(String STATUS) {
-        this.STATUS = STATUS;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getUID() {
-        return UID;
+    public String getUid() {
+        return uid;
     }
 
     @Override
@@ -62,13 +62,13 @@ public class User {
                 "id='" + iduser + '\'' +
                 ", nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
-                ", STATUS='" + STATUS + '\'' +
-                ", UID='" + UID + '\'' +
+                ", status='" + status + '\'' +
+                ", uid='" + uid + '\'' +
                 '}';
     }
 
-    public void setUID(String UID) {
-        this.UID = UID;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }
 

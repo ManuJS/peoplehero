@@ -38,4 +38,10 @@ public class MapPresenter implements Map.Presenter {
     public void updateHelpless(List<Helpless> help) {
         this.view.updateHelpless(help);
     }
+
+
+    @Override
+    public void confirmHelp(String idmendingo, String iduser) {
+        this.interactor.confirmHelp(idmendingo, iduser);
+    }
 }

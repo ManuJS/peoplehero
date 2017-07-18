@@ -27,9 +27,8 @@ public class LoginInteractor implements Login.Interactor {
     @Override
     public void login(Long uid, String nome, String email,String urlimage) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
-        //Call<UserDTO> repos = peopleHeroService.setLogin(uid, nome, email,urlimage);
         User user = new User();
-        user.setUID(String.valueOf(uid));
+        user.setUid(String.valueOf(uid));
         user.setEmail(email);
         user.setNome(nome);
         user.setUrlimage(urlimage);

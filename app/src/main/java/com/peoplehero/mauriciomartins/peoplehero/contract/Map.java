@@ -19,6 +19,8 @@ public interface Map {
         void showMessage(String messsage);
         void refresh(Long latitude, Long longitude,Long idUser);
         void updateHelpless(List<Helpless> help);
+
+        void confirmHelp(String idmendingo, String iduser);
     }
 
     static interface Interactor{
@@ -28,5 +30,7 @@ public interface Map {
         void refresh(Long latitude, Long longitude,Long idUser);
 
         void confirmHelp(Long latitude, Long longitude, Long idUser);
+
+        void confirmHelp(String idmendingo, String iduser);
     }
 }

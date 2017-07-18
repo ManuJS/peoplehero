@@ -2,6 +2,7 @@ package com.peoplehero.mauriciomartins.peoplehero.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,7 +24,6 @@ public class LoginActivity extends AbstractActivity implements Login.View {
     public void fbClick(View view){
         this.showProgress(true);
         this.presenter.login(1234567890L,"MSM","mrs@gmail.com","http://www.peoplehero.com.br/mendigo.png");
-        //this.connectToFacebook(null);
     }
 
     @Override
@@ -35,7 +35,8 @@ public class LoginActivity extends AbstractActivity implements Login.View {
     @Override
     public void connectToFacebook(UserDTO user){
         this.showProgress(false);
-        this.showMessage("Usuário cadastrado com sucesso!!!"+user);
+        Log.i("LoginActivity","Usuário cadastrado com sucesso!!!"+user);
+//        this.showMessage("Usuário cadastrado com sucesso!!!"+user);
         Intent intent = new Intent(this,MapActivity.class);
         startActivity(intent);
         this.finish();

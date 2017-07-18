@@ -3,8 +3,11 @@ package com.peoplehero.mauriciomartins.peoplehero.presenter.interactor;
 import android.util.Log;
 
 import com.peoplehero.mauriciomartins.peoplehero.contract.Map;
+import com.peoplehero.mauriciomartins.peoplehero.model.domain.Helpless;
+import com.peoplehero.mauriciomartins.peoplehero.model.domain.User;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelpDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelplessListDTO;
+import com.peoplehero.mauriciomartins.peoplehero.model.dto.UserDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.service.PeopleHeroService;
 
 import retrofit2.Call;
@@ -97,6 +100,36 @@ public class MapInteractor implements Map.Interactor {
 
             @Override
             public void onFailure(Call<HelpDTO> call, Throwable t) {
+                Log.i("Retrofit Service","Response:"+t.getMessage());
+                presenter.showMessage("Retrofit Service - Response:"+t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void confirmHelp(String idmendingo, String iduser) {
+        PeopleHeroService peopleHeroService = new PeopleHeroService();
+        final Helpless helpless =  new Helpless();
+        helpless.setIdmendingo(idmendingo);
+        helpless.setIduser(iduser);
+        Call<Helpless> repos = peopleHeroService.confirmHelp(helpless);
+
+        repos.enqueue(new Callback<Helpless>() {
+            @Override
+            public void onResponse(Call<Helpless> call, Response<Helpless> response) {
+
+                if(response!=null&&response.raw()!=null&& response.raw().code()==200){
+                    Helpless Helpless = response.body();
+                    presenter.showMessage("Ajuda confirmada: "+helpless);
+                }
+                else{
+                    Log.i("Retrofit Service","Erro : "+response.raw().code());
+                    presenter.showMessage("Retrofit Service - Erro : "+response.raw().code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Helpless> call, Throwable t) {
                 Log.i("Retrofit Service","Response:"+t.getMessage());
                 presenter.showMessage("Retrofit Service - Response:"+t.getMessage());
             }
