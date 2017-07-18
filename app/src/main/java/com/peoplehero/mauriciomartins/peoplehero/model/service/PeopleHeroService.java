@@ -1,5 +1,7 @@
 package com.peoplehero.mauriciomartins.peoplehero.model.service;
 
+import android.util.Log;
+
 import com.peoplehero.mauriciomartins.peoplehero.model.domain.User;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelpDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelplessListDTO;
@@ -40,6 +42,7 @@ public class PeopleHeroService {
     }
 
     public Call<UserDTO> setLogin(User user){
+        Log.i("Login","Üser"+user);
         Call<UserDTO> repos = service.setLoginBody(user);
         return repos;
     }

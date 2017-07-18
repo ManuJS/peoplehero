@@ -1,6 +1,7 @@
 package com.peoplehero.mauriciomartins.peoplehero.contract;
 
 import com.peoplehero.mauriciomartins.peoplehero.model.domain.User;
+import com.peoplehero.mauriciomartins.peoplehero.model.dto.UserDTO;
 
 /**
  * Created by mauriciomartins on 15/07/17.
@@ -9,14 +10,14 @@ import com.peoplehero.mauriciomartins.peoplehero.model.domain.User;
 public interface Login {
     static interface View{
         void showMessage(String message);
-        void connectToFacebook(User user);
+        void connectToFacebook(UserDTO user);
         void showProgress(boolean visible);
     }
 
     static interface Presenter{
         void login(Long uid, String nome, String email,String urlimage);
         void showMessage(String message);
-        void setUser(User user);
+        void setUser(UserDTO user);
     }
 
     static interface Interactor{

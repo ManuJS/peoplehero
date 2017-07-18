@@ -101,7 +101,7 @@ public class MapActivity extends AbstractActivity  implements  Map.View ,OnMapRe
 
         // Check if a click count was set, then display the click count.
         if (clickCount != null) {
-            
+
             Toast.makeText(this,
                     marker.getTitle() +
                             " Marker " + clickCount + " clicked.",

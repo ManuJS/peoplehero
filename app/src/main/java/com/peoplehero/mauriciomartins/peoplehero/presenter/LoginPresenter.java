@@ -1,19 +1,9 @@
 package com.peoplehero.mauriciomartins.peoplehero.presenter;
 
 
-import android.util.Log;
-
 import com.peoplehero.mauriciomartins.peoplehero.contract.Login;
-import com.peoplehero.mauriciomartins.peoplehero.model.domain.User;
-import com.peoplehero.mauriciomartins.peoplehero.model.service.PeopleHeroService;
+import com.peoplehero.mauriciomartins.peoplehero.model.dto.UserDTO;
 import com.peoplehero.mauriciomartins.peoplehero.presenter.interactor.LoginInteractor;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by mauriciomartins on 15/07/17.
@@ -39,7 +29,7 @@ public class LoginPresenter implements Login.Presenter {
     }
 
     @Override
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.view.connectToFacebook(user);
     }
 }

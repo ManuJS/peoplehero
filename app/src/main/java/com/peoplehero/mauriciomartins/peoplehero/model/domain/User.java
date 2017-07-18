@@ -9,7 +9,8 @@ public class User {
     private String nome;
     private String email;
     private String urlimage;
-    private Long uid;
+    private String STATUS;
+    private String UID;
 
     public String getNome() {
         return nome;
@@ -43,17 +44,31 @@ public class User {
         this.urlimage = urlimage;
     }
 
+    public String getSTATUS() {
+        return STATUS;
+    }
+
+    public void setSTATUS(String STATUS) {
+        this.STATUS = STATUS;
+    }
+
+    public String getUID() {
+        return UID;
+    }
+
     @Override
     public String toString() {
         return "Helpless{" +
                 "id='" + iduser + '\'' +
                 ", nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
+                ", STATUS='" + STATUS + '\'' +
+                ", UID='" + UID + '\'' +
                 '}';
     }
 
-    public void setUid(Long uid) {
-        this.uid = uid;
+    public void setUID(String UID) {
+        this.UID = UID;
     }
 }
 

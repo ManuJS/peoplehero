@@ -4,10 +4,8 @@ import android.util.Log;
 
 import com.peoplehero.mauriciomartins.peoplehero.contract.Login;
 import com.peoplehero.mauriciomartins.peoplehero.model.domain.User;
-import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelpDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.UserDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.service.PeopleHeroService;
-import com.peoplehero.mauriciomartins.peoplehero.presenter.LoginPresenter;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,13 +27,13 @@ public class LoginInteractor implements Login.Interactor {
     @Override
     public void login(Long uid, String nome, String email,String urlimage) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
-        Call<UserDTO> repos = peopleHeroService.setLogin(uid, nome, email,urlimage);
+        //Call<UserDTO> repos = peopleHeroService.setLogin(uid, nome, email,urlimage);
         User user = new User();
-        user.setUid(uid);
+        user.setUID(String.valueOf(uid));
         user.setEmail(email);
         user.setNome(nome);
         user.setUrlimage(urlimage);
-//        Call<UserDTO> repos = peopleHeroService.setLogin(user);
+        Call<UserDTO> repos = peopleHeroService.setLogin(user);
 
         repos.enqueue(new Callback<UserDTO>() {
             @Override
@@ -43,7 +41,7 @@ public class LoginInteractor implements Login.Interactor {
 
                 if(response!=null&&response.raw()!=null&& response.raw().code()==200){
                     UserDTO user = response.body();
-                    presenter.setUser(user.getUser());
+                    presenter.setUser(user);
                 }
                 else{
                     Log.i("Retrofit Service","Erro : "+response.raw().code());
