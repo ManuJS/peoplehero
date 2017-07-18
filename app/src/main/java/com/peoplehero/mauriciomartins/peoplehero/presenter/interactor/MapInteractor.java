@@ -4,10 +4,8 @@ import android.util.Log;
 
 import com.peoplehero.mauriciomartins.peoplehero.contract.Map;
 import com.peoplehero.mauriciomartins.peoplehero.model.domain.Helpless;
-import com.peoplehero.mauriciomartins.peoplehero.model.domain.User;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelpDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelplessListDTO;
-import com.peoplehero.mauriciomartins.peoplehero.model.dto.UserDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.service.PeopleHeroService;
 
 import retrofit2.Call;
@@ -29,7 +27,7 @@ public class MapInteractor implements Map.Interactor {
 
 
     @Override
-    public void refresh(Long latitude, Long longitude,Long idUser) {
+    public void refresh(double latitude, double longitude, double idUser) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
         Call<HelplessListDTO> repos = peopleHeroService.setHelp(latitude,longitude,idUser);
 
@@ -55,7 +53,7 @@ public class MapInteractor implements Map.Interactor {
     }
 
     @Override
-    public void setHelpAsk(Long latitude, Long longitude) {
+    public void setHelpAsk(double latitude, double longitude) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
         Call<HelpDTO> repos = peopleHeroService.setHelpAsk(latitude,longitude);
         repos.enqueue(new Callback<HelpDTO>() {
@@ -64,7 +62,7 @@ public class MapInteractor implements Map.Interactor {
 
                 if(response!=null&&response.raw()!=null&& response.raw().code()==200){
                     HelpDTO help = response.body();
-                    presenter.showMessage("Ajuda realizada com sucesso!!!");
+                    presenter.showMessage("Pedido de ajuda realizado com sucesso!!!");
                 }
                 else{
                     Log.i("Retrofit Service","Erro : "+response.raw().code());

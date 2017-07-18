@@ -14,12 +14,17 @@ import java.util.List;
 public class MapPresenter implements Map.Presenter {
     private final Map.Interactor interactor;
     private Map.View view;
+    private double latitude;
+    private double longitude;
+    private int iduser;
+    private String uid;
+
     public MapPresenter(Map.View view){
         this.view = view;
         this.interactor = new MapInteractor(this);
     }
     @Override
-    public void setHelpAsk(Long latitude, Long longitude) {
+    public void setHelpAsk() {
         this.interactor.setHelpAsk(latitude,longitude);
 
     }
@@ -30,8 +35,8 @@ public class MapPresenter implements Map.Presenter {
     }
 
     @Override
-    public void refresh(Long latitude, Long longitude,Long idUser) {
-        this.interactor.refresh(latitude,longitude,idUser);
+    public void refresh() {
+        this.interactor.refresh(latitude,longitude,iduser);
     }
 
     @Override
@@ -43,5 +48,17 @@ public class MapPresenter implements Map.Presenter {
     @Override
     public void confirmHelp(String idmendingo, String iduser) {
         this.interactor.confirmHelp(idmendingo, iduser);
+    }
+
+    @Override
+    public void saveLocation(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    @Override
+    public void saveUserInfo(int iduser, String uid) {
+        this.iduser = iduser;
+        this.uid    = uid;
     }
 }

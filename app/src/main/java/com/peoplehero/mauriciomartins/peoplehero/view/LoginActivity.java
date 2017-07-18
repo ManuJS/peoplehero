@@ -36,8 +36,10 @@ public class LoginActivity extends AbstractActivity implements Login.View {
     public void connectToFacebook(UserDTO user){
         this.showProgress(false);
         Log.i("LoginActivity","Usuário cadastrado com sucesso!!!"+user);
-//        this.showMessage("Usuário cadastrado com sucesso!!!"+user);
         Intent intent = new Intent(this,MapActivity.class);
+        final Bundle params = new Bundle();
+        intent.putExtra(MapActivity.IDUSER,Integer.valueOf(user.getIduser()));
+        intent.putExtra(MapActivity.UID,user.getUid());
         startActivity(intent);
         this.finish();
     }

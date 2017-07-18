@@ -25,13 +25,13 @@ public interface PeopleHeroServiceInterfaceApi {
     Call<UserDTO> setLogin(@Body User user);
 
     @POST("setHelp.php")
-    Call<HelplessListDTO> setHelp(@Query("latitude") Long latitude, @Query("longitude") Long longitude, @Query("iduser") Long iduser);
+    Call<HelplessListDTO> setHelp(@Query("latitude") double latitude, @Query("longitude") double longitude, @Query("iduser") double iduser);
 
     @POST("setLocation.php")
     Call<ResponseBody> setLocation(@Query("latitude") Long latitude, @Query("longitude") Long longitude, @Query("iduser") Long iduser);
 
     @POST("setHelpAsk.php")
-    Call<HelpDTO> setHelpAsk(@Query("latitude") Long latitude, @Query("longitude") Long longitude);
+    Call<HelpDTO> setHelpAsk(@Query("latitude") double latitude, @Query("longitude") double longitude);
 
     @Headers("Content-Type: application/json")
     @POST("confirmHelp.php")

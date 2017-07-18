@@ -15,19 +15,20 @@ public interface Map {
     }
 
     static interface Presenter{
-        void setHelpAsk(Long latitude, Long longitude);
+        void setHelpAsk();
         void showMessage(String messsage);
-        void refresh(Long latitude, Long longitude,Long idUser);
+        void refresh();
         void updateHelpless(List<Helpless> help);
-
         void confirmHelp(String idmendingo, String iduser);
+        void saveLocation(double latitude, double longitude);
+        void saveUserInfo(int iduser, String uid);
     }
 
     static interface Interactor{
 
-        void setHelpAsk(Long latitude, Long longitude);
+        void setHelpAsk(double latitude, double longitude);
 
-        void refresh(Long latitude, Long longitude,Long idUser);
+        void refresh(double latitude, double longitude, double idUser);
 
         void confirmHelp(Long latitude, Long longitude, Long idUser);
 
