@@ -30,7 +30,7 @@ public interface PeopleHeroServiceInterfaceApi {
     @POST("setLocation.php")
     Call<ResponseBody> setLocation(@Query("latitude") Long latitude, @Query("longitude") Long longitude, @Query("iduser") Long iduser);
 
-    @POST("setUser.php")
+    @POST("setHelpAsk.php")
     Call<HelpDTO> setHelpAsk(@Query("latitude") Long latitude, @Query("longitude") Long longitude);
 
     @Headers("Content-Type: application/json")
