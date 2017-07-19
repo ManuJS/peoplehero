@@ -11,14 +11,34 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.peoplehero.mauriciomartins.peoplehero.R;
 import com.peoplehero.mauriciomartins.peoplehero.contract.Login;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.UserDTO;
 import com.peoplehero.mauriciomartins.peoplehero.presenter.LoginPresenter;
 
-import java.util.UUID;
+import com.facebook.FacebookSdk;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+
+import static com.peoplehero.mauriciomartins.peoplehero.view.MapActivity.UID;
 
 public class LoginActivity extends AbstractActivity implements Login.View {
+    private CallbackManager callbackManager;
+
     private static final String PREFS = "PEOPLE_HERO";
     private static String uniqueID = null;
     private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
@@ -29,12 +49,53 @@ public class LoginActivity extends AbstractActivity implements Login.View {
         setContentView(R.layout.login_activity);
         this.presenter = new LoginPresenter(this);
         super.onCreate(savedInstanceState);
+
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+                // App code
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.v("LoginActivity", response.toString());
+                                // Application code
+                                try {
+                                    String id    = object.getString("id");
+                                    String name  = object.getString("name");
+                                    String email = object.getString("email");
+                                    presenter.login(id, name, email, "");
+                                } catch (JSONException error) {
+                                    showMessage("onError()"+error.getMessage());
+                                }
+
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                showMessage("Login cancelado");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                showMessage("onError()"+error.getMessage());
+            }
+        });
+
     }
 
     public void fbClick(View view){
         this.showProgress(true);
-        final String UID =  this.getUserID(this);
-        this.presenter.login(UID,"MSM","mrs@gmail.com","http://www.peoplehero.com.br/mendigo.png");
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile","email"));
     }
 
     @Override
@@ -50,31 +111,15 @@ public class LoginActivity extends AbstractActivity implements Login.View {
         Intent intent = new Intent(this,MapActivity.class);
         final Bundle params = new Bundle();
         intent.putExtra(MapActivity.IDUSER,Integer.valueOf(user.getIduser()));
-        intent.putExtra(MapActivity.UID,user.getUid());
+        intent.putExtra(UID,user.getUid());
         startActivity(intent);
         this.finish();
     }
 
 
-    public  String getUserID(Context context) {
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        uniqueID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);//telephonyManager.getDeviceId();
-//        if (uniqueID == null) {
-//            SharedPreferences sharedPrefs = context.getSharedPreferences(
-//                    LoginActivity.PREFS, Context.MODE_PRIVATE);
-//            uniqueID = sharedPrefs.getString(PREF_UNIQUE_ID, null);
-//            if (uniqueID == null) {
-//                uniqueID = UUID.randomUUID().toString();
-//                SharedPreferences.Editor editor = sharedPrefs.edit();
-//                editor.putString(PREF_UNIQUE_ID, uniqueID);
-//                editor.commit();
-//
-//                //backup the changes
-//                BackupManager mBackupManager = new BackupManager(context);
-//                mBackupManager.dataChanged();
-//            }
-//        }
-
-        return uniqueID;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

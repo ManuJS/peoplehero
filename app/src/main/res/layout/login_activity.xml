@@ -27,6 +27,7 @@
         android:onClick="fbClick"
         />
 
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
