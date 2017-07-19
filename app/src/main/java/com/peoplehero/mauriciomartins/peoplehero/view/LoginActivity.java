@@ -54,21 +54,19 @@ public class LoginActivity extends AbstractActivity implements Login.View {
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
-                // App code
-                GraphRequest request = GraphRequest.newMeRequest(
+                Profile profile = Profile.getCurrentProfile();
+                final String url = profile.getProfilePictureUri(200,200).toString();
+                final GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
-                                Log.v("LoginActivity", response.toString());
-                                // Application code
                                 try {
                                     String id    = object.getString("id");
                                     String name  = object.getString("name");
                                     String email = object.getString("email");
-                                    presenter.login(id, name, email, "");
-                                } catch (JSONException error) {
+                                    presenter.login(id, name, email, url);
+                               } catch (JSONException error) {
                                     showMessage("onError()"+error.getMessage());
                                 }
 
@@ -78,6 +76,7 @@ public class LoginActivity extends AbstractActivity implements Login.View {
                 parameters.putString("fields", "id,name,email");
                 request.setParameters(parameters);
                 request.executeAsync();
+
             }
 
             @Override
