@@ -1,5 +1,8 @@
 package com.peoplehero.mauriciomartins.peoplehero.contract;
 
+import android.content.Context;
+
+import com.peoplehero.mauriciomartins.peoplehero.ViewModel.MapModelView;
 import com.peoplehero.mauriciomartins.peoplehero.model.domain.Helpless;
 
 import java.util.List;
@@ -11,15 +14,17 @@ import java.util.List;
 public interface Map {
     static interface View{
         void showMessage(String message);
-        void updateHelpless(List<Helpless> help);
+        void updateHelpless(MapModelView help);
+        Context getContext();
+        void showProgress(boolean show);
     }
 
     static interface Presenter{
         void setHelpAsk();
         void showMessage(String messsage);
         void refresh();
-        void updateHelpless(List<Helpless> help);
-        void confirmHelp(String idmendingo, String iduser);
+        void updateHelpless(List<Helpless> helplessList);
+        void confirmHelp(String idmendingo);
         void saveLocation(double latitude, double longitude);
         void saveUserInfo(int iduser, String uid);
     }

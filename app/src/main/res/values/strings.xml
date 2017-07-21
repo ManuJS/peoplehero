@@ -6,4 +6,7 @@
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBWofLee10d5hV1MYUrmECF8o3EXgfz8fE</string>
     <string name="facebook_app_id">241662623005279</string>
     <string name="fb_login_protocol_scheme">fb241662623005279</string>
+    <string name="dialog_message">Confirmar ajuda?</string>
+    <string name="help">Ajudar</string>
+    <string name="cancel">Fechar</string>
 </resources>

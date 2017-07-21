@@ -1,6 +1,7 @@
 package com.peoplehero.mauriciomartins.peoplehero.presenter;
 
 
+import com.peoplehero.mauriciomartins.peoplehero.ViewModel.MapModelView;
 import com.peoplehero.mauriciomartins.peoplehero.contract.Map;
 import com.peoplehero.mauriciomartins.peoplehero.model.domain.Helpless;
 import com.peoplehero.mauriciomartins.peoplehero.presenter.interactor.MapInteractor;
@@ -40,14 +41,15 @@ public class MapPresenter implements Map.Presenter {
     }
 
     @Override
-    public void updateHelpless(List<Helpless> help) {
-        this.view.updateHelpless(help);
+    public void updateHelpless(List<Helpless> helplessList) {
+        this.view.updateHelpless(new MapModelView(this.view.getContext(),helplessList));
     }
 
 
     @Override
-    public void confirmHelp(String idmendingo, String iduser) {
-        this.interactor.confirmHelp(idmendingo, iduser);
+    public void confirmHelp(String idmendingo) {
+        this.view.showProgress(true);
+        this.interactor.confirmHelp(idmendingo, String.valueOf(iduser));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.peoplehero.mauriciomartins.peoplehero.view;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -38,5 +39,9 @@ public class AbstractActivity extends FragmentActivity {
                 this.progressBar.setVisibility(View.GONE);
             }
         }
+    }
+
+    public Context getContext() {
+        return this;
     }
 }

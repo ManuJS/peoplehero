@@ -1,25 +1,26 @@
 package com.peoplehero.mauriciomartins.peoplehero.view;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.peoplehero.mauriciomartins.peoplehero.R;
+import com.peoplehero.mauriciomartins.peoplehero.ViewModel.MapModelView;
+import com.peoplehero.mauriciomartins.peoplehero.ViewModel.pojo.MapPoint;
 import com.peoplehero.mauriciomartins.peoplehero.contract.Map;
-import com.peoplehero.mauriciomartins.peoplehero.model.domain.Helpless;
-import com.peoplehero.mauriciomartins.peoplehero.model.service.GPSTracker;
 import com.peoplehero.mauriciomartins.peoplehero.presenter.MapPresenter;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,20 +30,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.List;
-
 public class MapActivity extends AbstractActivity implements Map.View, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private Map.Presenter presenter;
     private GoogleMap mMap;
     private  boolean isFirstTime=true;
     public static final String UID = "UID";
     public static final String IDUSER = "IDUSER";
+    private MapModelView viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -104,7 +103,6 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
                             BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
                             mMap.addMarker(new MarkerOptions().position(here).icon(icon).title(getString(R.string.im_here)));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
-                            mMap.setOnMarkerClickListener(MapActivity.this);
                             showProgress(false);
                         }
                     }
@@ -130,20 +128,18 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
 
 
     @Override
-    public void updateHelpless(List<Helpless> helpList) {
+    public void updateHelpless(MapModelView helpList) {
         if (helpList != null && this.mMap != null) {
-            for (Helpless help : helpList) {
-                LatLng here = new LatLng(Double.valueOf(help.getLatitude()), Double.valueOf(help.getLongitude()));
-//                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.app_icon);
-//                BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-                Marker helplessMarker = mMap.addMarker(new MarkerOptions().position(here).title(getString(R.string.help_here)).flat(true).anchor(0.5f, 0.5f));
-                helplessMarker.setTag(Integer.valueOf(help.getIdmendingo()));
+            for (MapPoint help : helpList.getPoints()) {
+                Marker helplessMarker = mMap.addMarker(help.getMarkerOptions());
+                helplessMarker.setTag(help.getId());
             }
             LatLng here = new LatLng(-23.5538477, -46.6496773);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
         }
         this.showProgress(false);
     }
+
 
     /**
      * Manipulates the map once available.
@@ -159,16 +155,44 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
         mMap = googleMap;
         mMap.setMinZoomPreference(13.0f);
         mMap.setMaxZoomPreference(16.0f);
-
+        mMap.setOnMarkerClickListener(MapActivity.this);
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
         final Integer clickCount = (Integer) marker.getTag();
         if (clickCount != null) {
-            this.showProgress(true);
-            this.presenter.confirmHelp(String.valueOf(clickCount),"154");
+            final HelpDialog helpDialog = new HelpDialog(this.presenter,clickCount);
+            helpDialog.show(this.getSupportFragmentManager(),"helpDialog");
         }
         return false;
     }
+
+    public static class HelpDialog extends DialogFragment {
+        private final Integer helplessId;
+        private Map.Presenter presenter;
+        public  HelpDialog(final Map.Presenter presenter, Integer id){
+            this.presenter = presenter;
+            this.helplessId = id;
+        }
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.dialog_message)
+                    .setPositiveButton(R.string.help, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            presenter.confirmHelp(String.valueOf(helplessId));
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
+    }
 }
+
