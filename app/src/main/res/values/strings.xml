@@ -9,4 +9,6 @@
     <string name="dialog_message">Confirmar ajuda?</string>
     <string name="help">Ajudar</string>
     <string name="cancel">Fechar</string>
+    <string name="username">Nome:</string>
+    <string name="password">Senha:</string>
 </resources>
