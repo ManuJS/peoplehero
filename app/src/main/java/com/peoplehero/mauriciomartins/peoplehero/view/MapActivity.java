@@ -180,8 +180,11 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
             // Make the Intent explicit by setting the Google Maps package
             mapIntent.setPackage(packageName);
-            // Attempt to start an activity that can handle the Intent
-            startActivity(mapIntent);
+
+            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                // Attempt to start an activity that can handle the Intent
+                startActivity(mapIntent);
+            }
         }else{
             Intent i = new Intent(android.content.Intent.ACTION_VIEW);
             i.setData(Uri.parse("https://play.google.com/store/apps/details?id="+packageName));

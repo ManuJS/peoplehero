@@ -16,5 +16,5 @@
     <string name="waze">Waze</string>
     <string name="waze_url">waze://?ll=%1$s, %2$s&amp;navigate=yes</string>
     <string name="googlemaps">Google Maps</string>
-    <string name="googlemaps_url">google.streetview:cbll=%1$s, %2$s</string>
+    <string name="googlemaps_url">google.navigation:q=%1$s,%2$s</string>
 </resources>
