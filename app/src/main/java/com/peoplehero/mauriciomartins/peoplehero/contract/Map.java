@@ -17,6 +17,8 @@ public interface Map {
         void updateHelpless(MapModelView help);
         Context getContext();
         void showProgress(boolean show);
+
+        void route(String latitude, String longitude);
     }
 
     static interface Presenter{
@@ -27,6 +29,7 @@ public interface Map {
         void confirmHelp(String idmendingo);
         void saveLocation(double latitude, double longitude);
         void saveUserInfo(int iduser, String uid);
+        void route(String latitude, String longitude);
     }
 
     static interface Interactor{

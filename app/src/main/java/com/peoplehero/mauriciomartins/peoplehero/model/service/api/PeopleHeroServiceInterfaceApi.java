@@ -9,6 +9,7 @@ import com.peoplehero.mauriciomartins.peoplehero.model.dto.UserDTO;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -27,6 +28,10 @@ public interface PeopleHeroServiceInterfaceApi {
     @POST("setHelp.php")
     Call<HelplessListDTO> setHelp(@Query("latitude") double latitude, @Query("longitude") double longitude, @Query("iduser") double iduser);
 
+    @FormUrlEncoded
+    @POST("setHelp.php")
+    Call<HelplessListDTO> setHelpBody(@Field("latitude") double latitude, @Field("longitude") double longitude, @Field("iduser") double iduser);
+
     @POST("setLocation.php")
     Call<ResponseBody> setLocation(@Query("latitude") Long latitude, @Query("longitude") Long longitude, @Query("iduser") Long iduser);
 
@@ -34,6 +39,6 @@ public interface PeopleHeroServiceInterfaceApi {
     Call<HelpDTO> setHelpAsk(@Query("latitude") double latitude, @Query("longitude") double longitude);
 
     @Headers("Content-Type: application/json")
-    @POST("confirmHelp.php")
-    Call<Helpless> confirmHelp(@Body Helpless helpless);
+    @POST("setConfirmHelp.php")
+    Call<Helpless> setConfirmHelp(@Body Helpless helpless);
 }

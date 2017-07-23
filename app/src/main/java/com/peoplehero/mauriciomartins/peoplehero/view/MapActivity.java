@@ -3,17 +3,19 @@ package com.peoplehero.mauriciomartins.peoplehero.view;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -59,7 +61,6 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
         super.onStart();
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        this.showProgress(true);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             // Check Permissions Now
@@ -74,6 +75,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
 //                            Manifest.permission.ACCESS_FINE_LOCATION);
             }
         } else {
+            this.showProgress(true);
             long tempo = 1000 * 5;//5 minutos
             float distancia = 30; // 30 metros
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , tempo , distancia,  new LocationListener() {
@@ -163,43 +165,62 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
     public boolean onMarkerClick(Marker marker) {
         final Integer clickCount = (Integer) marker.getTag();
         if (clickCount != null) {
-            final HelpDialog helpDialog = new HelpDialog(this.presenter,clickCount);
+            final HelpDialog helpDialog = new HelpDialog(this.presenter,clickCount,marker);
             helpDialog.show(this.getSupportFragmentManager(),"helpDialog");
         }
         return false;
     }
 
+    @Override
+    public void route(String packageName, String url) {
+        if(appInstalledOrNot(packageName)) {
+            // Create a Uri from an intent string. Use the result to create an Intent.
+            Uri gmmIntentUri = Uri.parse(url);
+            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            // Make the Intent explicit by setting the Google Maps package
+            mapIntent.setPackage(packageName);
+            // Attempt to start an activity that can handle the Intent
+            startActivity(mapIntent);
+        }else{
+            Intent i = new Intent(android.content.Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://play.google.com/store/apps/details?id="+packageName));
+            startActivity(i);
+        }
+    }
+
     public static class HelpDialog extends DialogFragment {
         private final Integer helplessId;
         private Map.Presenter presenter;
-        public  HelpDialog(final Map.Presenter presenter, Integer id){
-            this.presenter = presenter;
+        private Marker marker;
+        public  HelpDialog(final Map.Presenter presenter, Integer id, Marker marker){
+            this.presenter  = presenter;
             this.helplessId = id;
+            this.marker     = marker;
         }
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            // Get the layout inflater
-            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View view = inflater.inflate(R.layout.dialog_route, null);
+            view.findViewById(R.id.btnWaze).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final RouteEnum router = RouteEnum.valueOf("WAZE");
+                    presenter.route(router.getPackageName(),getActivity().getString(router.getUrl(),String.valueOf(marker.getPosition().latitude),String.valueOf(marker.getPosition().longitude)));
+                    HelpDialog.this.dismiss();
+                }
+            });
 
-            // Inflate and set the layout for the dialog
-            // Pass null as the parent view because its going in the dialog layout
-            builder.setView(inflater.inflate(R.layout.dialog_signin, null))
-//
-//            // Use the Builder class for convenient dialog construction
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//            builder.setMessage(R.string.dialog_message)
-                    .setPositiveButton(R.string.help, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            presenter.confirmHelp(String.valueOf(helplessId));
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-
-                        }
-                    });
-            // Create the AlertDialog object and return it
+            view.findViewById(R.id.btnGoogleMaps).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final RouteEnum router = RouteEnum.valueOf("GOOGLEMAPS");
+                    presenter.route(router.getPackageName(),getActivity().getString(router.getUrl(),String.valueOf(marker.getPosition().latitude),String.valueOf(marker.getPosition().longitude)));
+                    HelpDialog.this.dismiss();
+                }
+            });
+            builder.setView(view);
             return builder.create();
         }
     }

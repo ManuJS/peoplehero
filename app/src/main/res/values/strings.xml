@@ -7,8 +7,14 @@
     <string name="facebook_app_id">241662623005279</string>
     <string name="fb_login_protocol_scheme">fb241662623005279</string>
     <string name="dialog_message">Confirmar ajuda?</string>
+    <string name="dialog_route_message">Escolha uma opção de trajeto\npara seguir em frente e ser\num herói!</string>
     <string name="help">Ajudar</string>
     <string name="cancel">Fechar</string>
     <string name="username">Nome:</string>
     <string name="password">Senha:</string>
+    <string name="attention">Atenção</string>
+    <string name="waze">Waze</string>
+    <string name="waze_url">waze://?ll=%1$s, %2$s&amp;navigate=yes</string>
+    <string name="googlemaps">Google Maps</string>
+    <string name="googlemaps_url">google.streetview:cbll=%1$s, %2$s</string>
 </resources>

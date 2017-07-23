@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/popup_background"
+    >
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/attention"
+        android:textColor="@color/keyguard_text_color_decline"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dialog_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_title"
+        android:text="@string/dialog_route_message"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="10dp"
+        />
+    <View
+        android:id="@+id/darkgrey_line"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:background="@android:color/darker_gray"/>
+    <LinearLayout
+        android:layout_below="@id/darkgrey_line"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="50dp"
+        android:weightSum="1"
+        >
+        <RelativeLayout
+            android:id="@+id/btnWaze"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/waze_icon"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/waze_icon"/>
+            <TextView
+                android:layout_toRightOf="@id/waze_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_centerVertical="true"
+                android:text="@string/waze"
+                android:textColor="@color/keyguard_text_color_decline"
+                android:textSize="16sp" />
+        </RelativeLayout>
+        <View
+            android:layout_width="0.6dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"/>
+        <RelativeLayout
+            android:id="@+id/btnGoogleMaps"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/googlemaps_icon"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/googlemaps_icon"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_toRightOf="@id/googlemaps_icon"
+                android:layout_centerVertical="true"
+                android:text="@string/googlemaps"
+                android:textColor="@color/keyguard_text_color_decline"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -63,4 +63,9 @@ public class MapPresenter implements Map.Presenter {
         this.iduser = iduser;
         this.uid    = uid;
     }
+
+    @Override
+    public void route(String packageName, String url) {
+        this.view.route(packageName,url);
+    }
 }
