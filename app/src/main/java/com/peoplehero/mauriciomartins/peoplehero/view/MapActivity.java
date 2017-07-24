@@ -13,9 +13,9 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -40,6 +40,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
     public static final String UID = "UID";
     public static final String IDUSER = "IDUSER";
     private MapModelView viewModel;
+    private boolean isRunning = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +78,12 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
         } else {
             this.showProgress(true);
             long tempo = 1000 * 5;//5 minutos
-            float distancia = 30; // 30 metros
+            float distancia = 10; // 30 metros
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , tempo , distancia,  new LocationListener() {
 
                 @Override
                 public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-//                    Toast.makeText(getApplicationContext(), "Status alterado:"+arg0+" - "+arg1, Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getApplicationContext(), "Status alterado:"+arg0+" - "+arg1, Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -97,17 +98,21 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
 
                 @Override
                 public void onLocationChanged(Location location) {
-                    if( location != null&&mMap!=null){
+                    if( location != null&&mMap!=null&&isRunning){
+                        mMap.clear();
+                        Log.i("Location","Status alterado:"+location.getLatitude()+" - "+location.getLongitude());
+                        //Toast.makeText(getApplicationContext(), "Status alterado:"+location.getLatitude()+" - "+location.getLongitude(), Toast.LENGTH_LONG).show();
                         presenter.saveLocation(location.getLatitude(), location.getLongitude());
-                        if(isFirstTime) {
+//                        if(isFirstTime) {
                             isFirstTime = false;
                             // Add a marker in Sydney and move the camera
                             LatLng here = new LatLng(location.getLatitude(), location.getLongitude());
-                            BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
+                            BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
                             mMap.addMarker(new MarkerOptions().position(here).icon(icon).title(getString(R.string.im_here)));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
+                            presenter.refresh();
                             showProgress(false);
-                        }
+//                        }
                     }
                 }
             }, null );
@@ -115,12 +120,24 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
 
     }
 
+    @Override
+    protected void onPause() {
+        isRunning = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        isRunning = true;
+        super.onResume();
+    }
+
     public void logOutClick(View view) {
         this.finish();
     }
 
     public void refreshClick(View view) {
-        this.showProgress(true);
+//        this.showProgress(true);
         this.presenter.refresh();
     }
 
@@ -137,8 +154,8 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
                 Marker helplessMarker = mMap.addMarker(help.getMarkerOptions());
                 helplessMarker.setTag(help.getId());
             }
-            LatLng here = new LatLng(-23.5538477, -46.6496773);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
+//            LatLng here = new LatLng(helpList.getLatitude(), helpList.getLongitude());
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
         }
         this.showProgress(false);
     }
@@ -165,8 +182,13 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
     public boolean onMarkerClick(Marker marker) {
         final Integer clickCount = (Integer) marker.getTag();
         if (clickCount != null) {
-            final HelpDialog helpDialog = new HelpDialog(this.presenter,clickCount,marker);
-            helpDialog.show(this.getSupportFragmentManager(),"helpDialog");
+            if(marker.isFlat()){
+                final HelpDialog helpDialog = new HelpDialog(this.presenter,clickCount,marker);
+                helpDialog.show(this.getSupportFragmentManager(),"HelpDialog");
+            }else{
+                final RouteDialog routeDialog = new RouteDialog(this.presenter,clickCount,marker);
+                routeDialog.show(this.getSupportFragmentManager(),"RouteDialog");
+            }
         }
         return false;
     }
@@ -185,11 +207,11 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
             }
     }
 
-    public static class HelpDialog extends DialogFragment {
+    public static class RouteDialog extends DialogFragment {
         private final Integer helplessId;
         private Map.Presenter presenter;
         private Marker marker;
-        public  HelpDialog(final Map.Presenter presenter, Integer id, Marker marker){
+        public RouteDialog(final Map.Presenter presenter, Integer id, Marker marker){
             this.presenter  = presenter;
             this.helplessId = id;
             this.marker     = marker;
@@ -204,7 +226,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
                 public void onClick(View view) {
                     final RouteEnum router = RouteEnum.valueOf("WAZE");
                     presenter.route(router.getPackageName(),getActivity().getString(router.getUrl(),String.valueOf(marker.getPosition().latitude),String.valueOf(marker.getPosition().longitude)));
-                    HelpDialog.this.dismiss();
+                    RouteDialog.this.dismiss();
                 }
             });
 
@@ -213,7 +235,40 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
                 public void onClick(View view) {
                     final RouteEnum router = RouteEnum.valueOf("GOOGLEMAPS");
                     presenter.route(router.getPackageName(),getActivity().getString(router.getUrl(),String.valueOf(marker.getPosition().latitude),String.valueOf(marker.getPosition().longitude)));
+                    RouteDialog.this.dismiss();
+                }
+            });
+            builder.setView(view);
+            return builder.create();
+        }
+    }
+
+    public static class HelpDialog extends DialogFragment {
+        private final Integer helplessId;
+        private Map.Presenter presenter;
+        private Marker marker;
+        public  HelpDialog(final Map.Presenter presenter, Integer id, Marker marker){
+            this.presenter  = presenter;
+            this.helplessId = id;
+            this.marker     = marker;
+        }
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View view = inflater.inflate(R.layout.dialog_help, null);
+            view.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     HelpDialog.this.dismiss();
+                }
+            });
+
+            view.findViewById(R.id.btnConfirm).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                     presenter.confirmHelp(String.valueOf(helplessId));
+                     HelpDialog.this.dismiss();
                 }
             });
             builder.setView(view);

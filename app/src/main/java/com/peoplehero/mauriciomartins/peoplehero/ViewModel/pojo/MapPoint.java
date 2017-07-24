@@ -9,6 +9,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapPoint {
     private MarkerOptions markerOptions;
     private int id;
+    private boolean isNear;
+    private double distance;
 
     public MapPoint(int id, MarkerOptions markerOptions) {
         this.id = id;
@@ -21,5 +23,21 @@ public class MapPoint {
 
     public int getId() {
         return id;
+    }
+
+    public boolean isNear() {
+        return isNear;
+    }
+
+    public void setNear(boolean near) {
+        isNear = near;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public double getDistance() {
+        return distance;
     }
 }

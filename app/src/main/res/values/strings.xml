@@ -6,7 +6,7 @@
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBWofLee10d5hV1MYUrmECF8o3EXgfz8fE</string>
     <string name="facebook_app_id">241662623005279</string>
     <string name="fb_login_protocol_scheme">fb241662623005279</string>
-    <string name="dialog_message">Confirmar ajuda?</string>
+    <string name="dialog_message">Confirme sua participaçao herói.</string>
     <string name="dialog_route_message">Escolha uma opção de trajeto\npara seguir em frente e ser\num herói!</string>
     <string name="help">Ajudar</string>
     <string name="cancel">Fechar</string>
@@ -17,4 +17,7 @@
     <string name="waze_url">waze://?ll=%1$s, %2$s&amp;navigate=yes</string>
     <string name="googlemaps">Google Maps</string>
     <string name="googlemaps_url">google.navigation:q=%1$s,%2$s</string>
+    <string name="confirm">OK</string>
+    <string name="dialog_help_message">Confirme sua participação como herói.</string>
+    <string name="warning">Aviso</string>
 </resources>
