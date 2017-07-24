@@ -173,23 +173,16 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
 
     @Override
     public void route(String packageName, String url) {
-        if(appInstalledOrNot(packageName)) {
-            // Create a Uri from an intent string. Use the result to create an Intent.
-            Uri gmmIntentUri = Uri.parse(url);
-            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-            // Make the Intent explicit by setting the Google Maps package
+            final Uri gmmIntentUri = Uri.parse(url);
+            final Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
             mapIntent.setPackage(packageName);
-
             if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                // Attempt to start an activity that can handle the Intent
                 startActivity(mapIntent);
+            }else{
+                Intent i = new Intent(android.content.Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://play.google.com/store/apps/details?id="+packageName));
+                startActivity(i);
             }
-        }else{
-            Intent i = new Intent(android.content.Intent.ACTION_VIEW);
-            i.setData(Uri.parse("https://play.google.com/store/apps/details?id="+packageName));
-            startActivity(i);
-        }
     }
 
     public static class HelpDialog extends DialogFragment {
