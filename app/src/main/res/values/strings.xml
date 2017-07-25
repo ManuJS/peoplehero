@@ -6,6 +6,7 @@
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBWofLee10d5hV1MYUrmECF8o3EXgfz8fE</string>
     <string name="facebook_app_id">241662623005279</string>
     <string name="fb_login_protocol_scheme">fb241662623005279</string>
+    <string name="people_hero_push_id">31586b1b-69be-4f54-9be2-acf83c59e14b</string>
     <string name="dialog_message">Confirme sua participaçao herói.</string>
     <string name="dialog_route_message">Escolha uma opção de trajeto\npara seguir em frente e ser\num herói!</string>
     <string name="help">Ajudar</string>

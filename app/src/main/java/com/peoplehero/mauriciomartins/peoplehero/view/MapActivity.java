@@ -18,12 +18,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
+import com.onesignal.OneSignal;
 import com.peoplehero.mauriciomartins.peoplehero.R;
 import com.peoplehero.mauriciomartins.peoplehero.ViewModel.MapModelView;
 import com.peoplehero.mauriciomartins.peoplehero.ViewModel.pojo.MapPoint;
@@ -58,6 +63,11 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
         final int iduser    = getIntent().getIntExtra(MapActivity.IDUSER,0);
         final String uid    = getIntent().getStringExtra(MapActivity.UID);
         this.presenter.saveUserInfo(iduser,uid);
+
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init();
     }
 
 
@@ -102,7 +112,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
 
                 @Override
                 public void onLocationChanged(Location location) {
-                    if( location != null&&mMap!=null&&isRunning){
+                    if( location != null&&mMap!=null){
                         Log.i("Location","Status alterado:"+location.getLatitude()+" - "+location.getLongitude());
                         mMap.clear();
                         presenter.saveLocation(location.getLatitude(), location.getLongitude());
@@ -303,5 +313,21 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(mNotificationId, mBuilder.build());
     }
+
+    public void showToast(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.map_activity,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        text.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
 }
 

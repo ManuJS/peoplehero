@@ -61,6 +61,4 @@
         android:layout_alignParentBottom="true"
         android:onClick="helpClick"
         android:background="@mipmap/verde"/>
-
-
 </RelativeLayout>

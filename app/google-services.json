@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "453121141044",
+    "firebase_url": "https://people-hero-1500257236900.firebaseio.com",
+    "project_id": "people-hero-1500257236900",
+    "storage_bucket": "people-hero-1500257236900.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453121141044:android:32e879016f5a2f69",
+        "android_client_info": {
+          "package_name": "com.peoplehero.mauriciomartins.peoplehero"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453121141044-9m0qc827janqrc8c1gsc79pe3cgdqcds.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPwSVXAzcttOJkgZUMgnDRMrqTyoQVjas"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
