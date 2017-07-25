@@ -99,20 +99,20 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
                 @Override
                 public void onLocationChanged(Location location) {
                     if( location != null&&mMap!=null&&isRunning){
-                        mMap.clear();
                         Log.i("Location","Status alterado:"+location.getLatitude()+" - "+location.getLongitude());
-                        //Toast.makeText(getApplicationContext(), "Status alterado:"+location.getLatitude()+" - "+location.getLongitude(), Toast.LENGTH_LONG).show();
+                        mMap.clear();
                         presenter.saveLocation(location.getLatitude(), location.getLongitude());
-//                        if(isFirstTime) {
+                        final LatLng here = new LatLng(location.getLatitude(), location.getLongitude());
+                        final BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                        mMap.addMarker(new MarkerOptions().position(here).icon(icon).title(getString(R.string.im_here)));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
+                        if(isFirstTime) {
                             isFirstTime = false;
-                            // Add a marker in Sydney and move the camera
-                            LatLng here = new LatLng(location.getLatitude(), location.getLongitude());
-                            BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-                            mMap.addMarker(new MarkerOptions().position(here).icon(icon).title(getString(R.string.im_here)));
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
+                            showProgress(true);
                             presenter.refresh();
-                            showProgress(false);
-//                        }
+                        }else{
+                            presenter.update();
+                        }
                     }
                 }
             }, null );
@@ -137,7 +137,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
     }
 
     public void refreshClick(View view) {
-//        this.showProgress(true);
+        this.showProgress(true);
         this.presenter.refresh();
     }
 

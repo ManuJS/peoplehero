@@ -31,12 +31,11 @@ public class PeopleHeroService {
     }
 
     public Call<HelplessListDTO> setHelp(double latitude, double longitude, double idUser){
-        //Call<HelplessListDTO> repos = service.setHelp(latitude, longitude,idUser);
         final Helpless helpless = new Helpless();
         helpless.setIduser(String.valueOf(idUser));
         helpless.setLatitude(String.valueOf(latitude));
         helpless.setLongitude(String.valueOf(longitude));
-        Call<HelplessListDTO> repos = service.setHelpBody(latitude, longitude,idUser);
+        Call<HelplessListDTO> repos = service.setHelp(helpless);
         return repos;
     }
 

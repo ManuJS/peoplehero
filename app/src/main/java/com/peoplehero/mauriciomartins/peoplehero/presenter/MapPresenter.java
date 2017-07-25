@@ -38,9 +38,6 @@ public class MapPresenter implements Map.Presenter {
 
     @Override
     public void refresh() {
-        if(this.helplessList!=null){
-            this.view.updateHelpless(new MapModelView(this.view.getContext(),this,helplessList,this.latitude,this.longitude));
-        }
         this.interactor.refresh(latitude,longitude,iduser);
     }
 
@@ -81,6 +78,12 @@ public class MapPresenter implements Map.Presenter {
         return R*Math.acos(Math.cos(Math.PI*(90-D3)/180)*Math.cos((90-D2)*Math.PI/180)+Math.sin((90-D3)*Math.PI/180)*Math.sin((90-D2)*Math.PI/180)*Math.cos((E2-E3)*Math.PI/180));
     }
 
+    @Override
+    public void update() {
+        if(this.helplessList!=null){
+            this.view.updateHelpless(new MapModelView(this.view.getContext(),this,helplessList,this.latitude,this.longitude));
+        }
+    }
 
 
     private double deg2rad(double deg) {

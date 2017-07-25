@@ -25,12 +25,9 @@ public interface PeopleHeroServiceInterfaceApi {
     @POST("setLogin.php")
     Call<UserDTO> setLogin(@Body User user);
 
+    @Headers("Content-Type: application/json")
     @POST("setHelp.php")
-    Call<HelplessListDTO> setHelp(@Query("latitude") double latitude, @Query("longitude") double longitude, @Query("iduser") double iduser);
-
-    @FormUrlEncoded
-    @POST("setHelp.php")
-    Call<HelplessListDTO> setHelpBody(@Field("latitude") double latitude, @Field("longitude") double longitude, @Field("iduser") double iduser);
+    Call<HelplessListDTO> setHelp(@Body Helpless helpless);
 
     @POST("setLocation.php")
     Call<ResponseBody> setLocation(@Query("latitude") Long latitude, @Query("longitude") Long longitude, @Query("iduser") Long iduser);

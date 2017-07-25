@@ -32,6 +32,9 @@ public interface Map {
         void route(String latitude, String longitude);
 
         double distance(double D2, double D3, double E2, double E3);
+
+        void update();
+
     }
 
     static interface Interactor{
