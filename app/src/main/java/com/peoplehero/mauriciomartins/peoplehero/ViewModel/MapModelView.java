@@ -38,6 +38,10 @@ public class MapModelView extends ViewModel {
 //               distance<1000?BitmapDescriptorFactory.HUE_YELLOW:BitmapDescriptorFactory.HUE_GREEN;
                float markerIcon = BitmapDescriptorFactory.HUE_GREEN;
                if(distance<100){
+                   int notificationId      =  100;
+                   String notificationTitle = "Alguem precisando de ajuda por perto!!!";
+                   String notificationIfo   = "Não perca tempo!!\nAproveite pra ajudar alguem por perto nos pontos laranja no mapa!";
+                   presenter.showNotification(notificationId,  notificationTitle, notificationIfo);
                    markerIcon = BitmapDescriptorFactory.HUE_ORANGE;
                }
                final BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(markerIcon);

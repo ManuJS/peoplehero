@@ -17,8 +17,8 @@ public interface Map {
         void updateHelpless(MapModelView help);
         Context getContext();
         void showProgress(boolean show);
-
         void route(String latitude, String longitude);
+        void showNotification(int notificationId, String notificationTitle, String notificationIfo);
     }
 
     static interface Presenter{
@@ -30,11 +30,9 @@ public interface Map {
         void saveLocation(double latitude, double longitude);
         void saveUserInfo(int iduser, String uid);
         void route(String latitude, String longitude);
-
         double distance(double D2, double D3, double E2, double E3);
-
         void update();
-
+        void showNotification(int notificationId, String notificationTitle, String notificationIfo);
     }
 
     static interface Interactor{

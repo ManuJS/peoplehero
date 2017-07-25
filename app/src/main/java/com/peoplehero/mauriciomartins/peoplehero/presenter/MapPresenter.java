@@ -85,6 +85,11 @@ public class MapPresenter implements Map.Presenter {
         }
     }
 
+    @Override
+    public void showNotification(int notificationId, String notificationTitle, String notificationIfo) {
+        this.view.showNotification(notificationId, notificationTitle, notificationIfo);
+    }
+
 
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
