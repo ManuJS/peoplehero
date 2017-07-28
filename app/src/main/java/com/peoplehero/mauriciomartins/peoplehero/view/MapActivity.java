@@ -295,6 +295,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
             view.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    presenter.showProgress(false);
                     AskHelpDialog.this.dismiss();
                 }
             });
@@ -325,6 +326,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
             view.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    presenter.showProgress(false);
                     SentHelpDialog.this.dismiss();
                 }
             });

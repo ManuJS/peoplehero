@@ -96,6 +96,11 @@ public class MapPresenter implements Map.Presenter {
         this.view.showSentHelpMessage();
     }
 
+    @Override
+    public void showProgress(boolean visible) {
+        this.view.showProgress(visible);
+    }
+
 
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);

@@ -34,17 +34,20 @@ public class MapModelView extends ViewModel {
                //final double distance = presenter.distance(-23.9178,-47.0586,-24.1428,-47.1567)*1000;
 
                LatLng here = new LatLng(Double.valueOf(help.getLatitude()), Double.valueOf(help.getLongitude()));
-//                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.app_icon);
 //               distance<1000?BitmapDescriptorFactory.HUE_YELLOW:BitmapDescriptorFactory.HUE_GREEN;
-               float markerIcon = BitmapDescriptorFactory.HUE_GREEN;
+
+               BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.pino);
+
                if(distance<100){
                    int notificationId      =  100;
                    String notificationTitle = "Alguem precisando de ajuda por perto!!!";
                    String notificationIfo   = "Não perca tempo!!\nAproveite pra ajudar alguem por perto nos pontos laranja no mapa!";
                    presenter.showNotification(notificationId,  notificationTitle, notificationIfo);
-                   markerIcon = BitmapDescriptorFactory.HUE_ORANGE;
+//                   markerIcon = BitmapDescriptorFactory.HUE_ORANGE;
+                   float markerIcon = BitmapDescriptorFactory.HUE_GREEN;
+                   icon = BitmapDescriptorFactory.defaultMarker(markerIcon);
                }
-               final BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(markerIcon);
+
                final MarkerOptions markerOptions = new MarkerOptions().position(here).title(context.getString(R.string.help_here)).flat(distance<100).anchor(0.5f, 0.5f).icon(icon);
                final int           id            = Integer.valueOf(help.getIdmendingo());
                final MapPoint  mapPoint = new MapPoint(id,markerOptions);

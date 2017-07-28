@@ -118,7 +118,6 @@ public class MapInteractor implements Map.Interactor {
 
                 if(response!=null&&response.raw()!=null&& response.raw().code()==200){
                     Helpless Helpless = response.body();
-//                    presenter.showMessage("Ajuda confirmada: "+helpless);
                     presenter.showSentHelpMessage();
                 }
                 else{
