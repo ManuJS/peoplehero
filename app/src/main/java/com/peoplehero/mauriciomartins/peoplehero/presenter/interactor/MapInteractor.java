@@ -118,18 +118,21 @@ public class MapInteractor implements Map.Interactor {
 
                 if(response!=null&&response.raw()!=null&& response.raw().code()==200){
                     Helpless Helpless = response.body();
-                    presenter.showMessage("Ajuda confirmada: "+helpless);
+//                    presenter.showMessage("Ajuda confirmada: "+helpless);
+                    presenter.showSentHelpMessage();
                 }
                 else{
+                    presenter.showSentHelpMessage();
                     Log.i("Retrofit Service","Erro : "+response.raw().code());
-                    presenter.showMessage("Retrofit Service - Erro : "+response.raw().code());
+//                    presenter.showMessage("Retrofit Service - Erro : "+response.raw().code());
                 }
             }
 
             @Override
             public void onFailure(Call<Helpless> call, Throwable t) {
                 Log.i("Retrofit Service","Response:"+t.getMessage());
-                presenter.showMessage("Retrofit Service - Response:"+t.getMessage());
+                presenter.showSentHelpMessage();
+                //presenter.showMessage("Retrofit Service - Response:"+t.getMessage());
             }
         });
     }

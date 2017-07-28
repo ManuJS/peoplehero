@@ -30,10 +30,6 @@ public class AbstractActivity extends FragmentActivity {
     }
 
     public void showMessage(String message) {
-        if(progressBar!=null) {
-            this.progressBar.setVisibility(View.GONE);
-        }
-
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_toast_layout,
                 (ViewGroup) findViewById(R.id.custom_toast_container));

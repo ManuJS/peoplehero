@@ -156,8 +156,8 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
     }
 
     public void helpClick(View view) {
-        this.showProgress(true);
-        this.presenter.setHelpAsk();
+        final AskHelpDialog confirmHelpDialog = new AskHelpDialog(this.presenter);
+        confirmHelpDialog.show(this.getSupportFragmentManager(),"AskHelpDialog");
     }
 
 
@@ -168,22 +168,10 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
                 Marker helplessMarker = mMap.addMarker(help.getMarkerOptions());
                 helplessMarker.setTag(help.getId());
             }
-//            LatLng here = new LatLng(helpList.getLatitude(), helpList.getLongitude());
-//            mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
         }
         this.showProgress(false);
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -271,13 +259,6 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             final LayoutInflater inflater = getActivity().getLayoutInflater();
             final View view = inflater.inflate(R.layout.dialog_help, null);
-            view.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    HelpDialog.this.dismiss();
-                }
-            });
-
             view.findViewById(R.id.btnConfirm).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -289,6 +270,67 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
             return builder.create();
         }
     }
+
+    public static class AskHelpDialog extends DialogFragment {
+        private Map.Presenter presenter;
+        public AskHelpDialog(final Map.Presenter presenter){
+            this.presenter = presenter;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View view = inflater.inflate(R.layout.dialog_ask_help, null);
+            view.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AskHelpDialog.this.dismiss();
+                }
+            });
+
+            view.findViewById(R.id.btnConfirm).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    presenter.setHelpAsk();
+                    AskHelpDialog.this.dismiss();
+                }
+            });
+            builder.setView(view);
+            return builder.create();
+        }
+    }
+
+    public static class SentHelpDialog extends DialogFragment {
+        private Map.Presenter presenter;
+        public SentHelpDialog(final Map.Presenter presenter){
+            this.presenter = presenter;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View view = inflater.inflate(R.layout.dialog_sent_help, null);
+            view.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SentHelpDialog.this.dismiss();
+                }
+            });
+
+            view.findViewById(R.id.btnConfirm).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    presenter.showMessage("Em desenvolvimento!");
+                    SentHelpDialog.this.dismiss();
+                }
+            });
+            builder.setView(view);
+            return builder.create();
+        }
+    }
+
 
     @Override
     public void showNotification(int mNotificationId, String notificationTitle, String notificationIfo){
@@ -314,20 +356,22 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
         mNotificationManager.notify(mNotificationId, mBuilder.build());
     }
 
-    public void showToast(String message){
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.map_activity,
-                (ViewGroup) findViewById(R.id.custom_toast_container));
-
-        TextView text = (TextView) layout.findViewById(R.id.text);
-        text.setText(message);
-
-        Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setView(layout);
-        toast.show();
+    @Override
+    public void showSentHelpMessage() {
+        final SentHelpDialog sentHelpDialog = new SentHelpDialog(this.presenter);
+        sentHelpDialog.show(this.getSupportFragmentManager(),"SentHelpDialog");
     }
 
+    @Override
+    public void showMessage(String message) {
+        super.showMessage(message);
+        this.showProgress(false);
+    }
+
+    @Override
+    public void showProgress(boolean visible) {
+        super.showProgress(visible);
+        this.findViewById(R.id.btnRefresh).setVisibility(visible?View.INVISIBLE:View.VISIBLE);
+    }
 }
 

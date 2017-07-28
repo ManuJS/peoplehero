@@ -10,7 +10,7 @@
     <string name="dialog_message">Confirme sua participaçao herói.</string>
     <string name="dialog_route_message">Escolha uma opção de trajeto\npara seguir em frente e ser\num herói!</string>
     <string name="help">Ajudar</string>
-    <string name="cancel">Fechar</string>
+    <string name="cancel">Cancelar</string>
     <string name="username">Nome:</string>
     <string name="password">Senha:</string>
     <string name="attention">Atenção</string>
@@ -18,7 +18,18 @@
     <string name="waze_url">waze://?ll=%1$s, %2$s&amp;navigate=yes</string>
     <string name="googlemaps">Google Maps</string>
     <string name="googlemaps_url">google.navigation:q=%1$s,%2$s</string>
-    <string name="confirm">OK</string>
+    <string name="confirm">Confirmar</string>
     <string name="dialog_help_message">Confirme sua participação como herói.</string>
     <string name="warning">Aviso</string>
+    <string name="dialog_subtitle_message">Você está marcando este local</string>
+    <string name="dialog_askhelp_message">Clicando em confirmar, você estará\nmarcando essa localização, essa\ncoordenada aparecerá para outras\npessoas como um pedido de <b>Help!</b>\nAssim, outras pessoas poderão\najudar a pessoa marcada na\nlocalização.</string>
+    <string name="congratulations">Parabéns</string>
+    <string name="dialog_sent_help_subtitle_message">Você agora é um Hero!</string>
+    <string name="dialog_sent_help_message">Registre este momento e compartilhe\nesta idéia com seus amigos!</string>
+    <string name="finish">Finalizar</string>
+    <string name="camera">Câmera</string>
+    <string name="logout">Sair</string>
+    <string name="confirmation">Confirmação</string>
+    <string name="dialog_help_subtitle_message">Clique em confirmar para finalizar</string>
+    <string name="dialog_help_info">A confirmação só deve ser feita depois\nde completar a doação</string>
 </resources>

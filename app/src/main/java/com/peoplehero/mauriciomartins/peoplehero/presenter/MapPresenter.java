@@ -27,6 +27,7 @@ public class MapPresenter implements Map.Presenter {
     }
     @Override
     public void setHelpAsk() {
+        this.view.showProgress(true);
         this.interactor.setHelpAsk(latitude,longitude);
 
     }
@@ -88,6 +89,11 @@ public class MapPresenter implements Map.Presenter {
     @Override
     public void showNotification(int notificationId, String notificationTitle, String notificationIfo) {
         this.view.showNotification(notificationId, notificationTitle, notificationIfo);
+    }
+
+    @Override
+    public void showSentHelpMessage() {
+        this.view.showSentHelpMessage();
     }
 
 

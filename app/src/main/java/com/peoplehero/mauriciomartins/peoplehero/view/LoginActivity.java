@@ -93,6 +93,8 @@ public class LoginActivity extends AbstractActivity implements Login.View {
     }
 
     public void fbClick(View view){
+        this.findViewById(R.id.fb_btn).setEnabled(false);
+        this.findViewById(R.id.fb_btn).setAlpha(0.8f);
         this.showProgress(true);
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile","email"));
     }
@@ -100,6 +102,8 @@ public class LoginActivity extends AbstractActivity implements Login.View {
     @Override
     public void showMessage(String  message){
         this.showProgress(false);
+        this.findViewById(R.id.fb_btn).setEnabled(true);
+        this.findViewById(R.id.fb_btn).setAlpha(1.0f);
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
@@ -118,6 +122,8 @@ public class LoginActivity extends AbstractActivity implements Login.View {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        this.findViewById(R.id.fb_btn).setEnabled(true);
+        this.findViewById(R.id.fb_btn).setAlpha(1.0f);
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }

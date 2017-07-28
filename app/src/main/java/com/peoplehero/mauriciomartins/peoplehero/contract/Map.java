@@ -19,6 +19,7 @@ public interface Map {
         void showProgress(boolean show);
         void route(String latitude, String longitude);
         void showNotification(int notificationId, String notificationTitle, String notificationIfo);
+        void showSentHelpMessage();
     }
 
     static interface Presenter{
@@ -33,6 +34,7 @@ public interface Map {
         double distance(double D2, double D3, double E2, double E3);
         void update();
         void showNotification(int notificationId, String notificationTitle, String notificationIfo);
+        void showSentHelpMessage();
     }
 
     static interface Interactor{

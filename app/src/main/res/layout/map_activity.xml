@@ -10,27 +10,39 @@
 
 
     <ImageView
-        android:id="@+id/top_bar"
-        android:layout_width="match_parent"
-        android:layout_height="51dp"
-        android:background="@mipmap/retangulo"
+    android:id="@+id/top_bar"
+    android:layout_width="match_parent"
+    android:layout_height="51dp"
+    android:background="@mipmap/retangulo"
+    />
+
+    <ImageView
+        android:id="@+id/peoplehero_title"
+        android:layout_width="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:layout_height="30dp"
+        android:background="@mipmap/people_hero"
         />
+
 
     <TextView
         android:layout_width="51dp"
         android:layout_height="51dp"
         android:gravity="center"
         android:onClick="logOutClick"
-        android:text="Sair"/>
+        android:textColor="@android:color/white"
+        android:text="@string/logout"/>
 
     <ImageView
+        android:id="@+id/btnRefresh"
         android:layout_width="51dp"
         android:layout_height="51dp"
         android:padding="10dp"
         android:src="@mipmap/refresh"
         android:onClick="refreshClick"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentRight="true"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -38,9 +50,9 @@
         android:layout_height="31dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:indeterminate="true"
         />
 

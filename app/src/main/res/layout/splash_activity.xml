@@ -8,19 +8,11 @@
     android:background="@mipmap/retangulo">
 
 
-
     <ImageView
-        android:id="@+id/icon"
-        android:layout_width="118dp"
-        android:layout_height="99dp"
+        android:layout_width="194dp"
+        android:layout_height="31dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@mipmap/mascote" />
-
-    <ImageView
-        android:layout_width="125dp"
-        android:layout_height="20dp"
-        android:layout_centerHorizontal="true"
         android:background="@mipmap/people_hero"
         android:layout_below="@id/icon"
         />
