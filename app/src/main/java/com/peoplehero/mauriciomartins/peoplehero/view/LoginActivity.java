@@ -93,8 +93,8 @@ public class LoginActivity extends AbstractActivity implements Login.View {
     }
 
     public void fbClick(View view){
-        this.findViewById(R.id.fb_btn).setEnabled(false);
-        this.findViewById(R.id.fb_btn).setAlpha(0.8f);
+        view.setEnabled(false);
+        view.setAlpha(0.8f);
         this.showProgress(true);
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile","email"));
     }

@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
@@ -155,9 +156,18 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
         this.presenter.refresh();
     }
 
-    public void helpClick(View view) {
+    public void helpClick(final View view) {
+        view.setAlpha(0.7f);
+        this.zoomImageFromThumb(view);
         final AskHelpDialog confirmHelpDialog = new AskHelpDialog(this.presenter);
         confirmHelpDialog.show(this.getSupportFragmentManager(),"AskHelpDialog");
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.setAlpha(1.0f);
+            }
+        },2000);
     }
 
 

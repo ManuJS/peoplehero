@@ -1,8 +1,14 @@
 package com.peoplehero.mauriciomartins.peoplehero.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +17,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +26,8 @@ import com.peoplehero.mauriciomartins.peoplehero.R;
 
 public class AbstractActivity extends FragmentActivity {
     private ProgressBar progressBar;
-
+    protected Animator mCurrentAnimator;
+    protected int mShortAnimationDuration;
     @Override
     protected void onStart() {
         super.onStart();
@@ -69,5 +77,10 @@ public class AbstractActivity extends FragmentActivity {
             app_installed = false;
         }
         return app_installed ;
+    }
+
+
+    protected void zoomImageFromThumb(final View thumbView) {
+
     }
 }
