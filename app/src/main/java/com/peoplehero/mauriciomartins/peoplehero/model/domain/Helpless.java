@@ -9,6 +9,7 @@ public class Helpless {
     private String iduser;
     private String latitude;
     private String longitude;
+    private int contadorAjuda;
 
     public String getIdmendingo() {
         return idmendingo;
@@ -40,6 +41,22 @@ public class Helpless {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public void setContadorAjuda(int contadorAjuda) {
+        this.contadorAjuda = contadorAjuda;
+    }
+
+    public int getContadorAjuda() {
+        return contadorAjuda;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Helpless && this.getIdmendingo()!=null){
+            return   this.getIdmendingo().equals(((Helpless) obj).getIdmendingo());
+        }
+        return false;
     }
 
     @Override

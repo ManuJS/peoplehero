@@ -29,27 +29,32 @@ public class MapModelView extends ViewModel {
        this.longitude = currentLongitude;
        this.points = new ArrayList<>();
        if (helpList != null) {
-           for (Helpless help : helpList) {
-               final double distance = presenter.distance(currentLatitude,currentLongitude,Double.valueOf(help.getLatitude()),Double.valueOf(help.getLongitude()))*1000;
+           for (Helpless helpless : helpList) {
+               final double distance = presenter.distance(currentLatitude,currentLongitude,Double.valueOf(helpless.getLatitude()),Double.valueOf(helpless.getLongitude()))*1000;
                //final double distance = presenter.distance(-23.9178,-47.0586,-24.1428,-47.1567)*1000;
 
-               LatLng here = new LatLng(Double.valueOf(help.getLatitude()), Double.valueOf(help.getLongitude()));
+               LatLng here = new LatLng(Double.valueOf(helpless.getLatitude()), Double.valueOf(helpless.getLongitude()));
 //               distance<1000?BitmapDescriptorFactory.HUE_YELLOW:BitmapDescriptorFactory.HUE_GREEN;
 
-               BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.pino);
 
-               if(distance<100){
+               float markerIcon = BitmapDescriptorFactory.HUE_GREEN;
+               BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(markerIcon);
+//               BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.pino);
+               if(helpless.getContadorAjuda()>0){
+//                   markerIcon = BitmapDescriptorFactory.HUE_GREEN;
+//                   icon = BitmapDescriptorFactory.defaultMarker(markerIcon);
+                   icon = BitmapDescriptorFactory.fromResource(R.mipmap.pino);
+               }else if(distance<100){
                    int notificationId      =  100;
                    String notificationTitle = "Alguem precisando de ajuda por perto!!!";
                    String notificationIfo   = "Não perca tempo!!\nAproveite pra ajudar alguem por perto nos pontos laranja no mapa!";
                    presenter.showNotification(notificationId,  notificationTitle, notificationIfo);
-//                   markerIcon = BitmapDescriptorFactory.HUE_ORANGE;
-                   float markerIcon = BitmapDescriptorFactory.HUE_GREEN;
+                   markerIcon = BitmapDescriptorFactory.HUE_ORANGE;
                    icon = BitmapDescriptorFactory.defaultMarker(markerIcon);
                }
 
                final MarkerOptions markerOptions = new MarkerOptions().position(here).title(context.getString(R.string.help_here)).flat(distance<100).anchor(0.5f, 0.5f).icon(icon);
-               final int           id            = Integer.valueOf(help.getIdmendingo());
+               final int           id            = Integer.valueOf(helpless.getIdmendingo());
                final MapPoint  mapPoint = new MapPoint(id,markerOptions);
                mapPoint.setDistance(distance);
                this.points.add(mapPoint);

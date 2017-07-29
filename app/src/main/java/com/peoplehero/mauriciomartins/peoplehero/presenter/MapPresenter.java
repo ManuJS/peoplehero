@@ -101,6 +101,15 @@ public class MapPresenter implements Map.Presenter {
         this.view.showProgress(visible);
     }
 
+    @Override
+    public void updateHelp(Helpless helpless) {
+        final int index = this.helplessList.indexOf(helpless);
+        if(index>-1){
+            this.helplessList.get(index).setContadorAjuda(1);
+            this.updateHelpless(this.helplessList);
+        }
+    }
+
 
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);

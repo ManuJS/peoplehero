@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.share.model.ShareLinkContent;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
@@ -334,7 +335,10 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
             view.findViewById(R.id.btnConfirm).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    presenter.showMessage("Em desenvolvimento!");
+//                    presenter.showMessage("Em desenvolvimento!");
+                    ShareLinkContent content = new ShareLinkContent.Builder()
+                            .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                            .build();
                     SentHelpDialog.this.dismiss();
                 }
             });

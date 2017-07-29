@@ -35,8 +35,8 @@ public interface Map {
         void update();
         void showNotification(int notificationId, String notificationTitle, String notificationIfo);
         void showSentHelpMessage();
-
         void showProgress(boolean visible);
+        void updateHelp(Helpless idmendingo);
     }
 
     static interface Interactor{

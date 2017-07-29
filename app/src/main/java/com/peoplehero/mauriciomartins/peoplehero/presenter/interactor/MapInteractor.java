@@ -79,7 +79,7 @@ public class MapInteractor implements Map.Interactor {
     }
 
     @Override
-    public void confirmHelp(Long latitude, Long longitude, Long idUser) {
+    public void confirmHelp(Long latitude, Long longitude, final Long idUser) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
         Call<HelpDTO> repos = peopleHeroService.setHelpAsk(latitude,longitude);
         repos.enqueue(new Callback<HelpDTO>() {
@@ -105,7 +105,7 @@ public class MapInteractor implements Map.Interactor {
     }
 
     @Override
-    public void confirmHelp(String idmendingo, String iduser) {
+    public void confirmHelp(final String idmendingo, String iduser) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
         final Helpless helpless =  new Helpless();
         helpless.setIdmendingo(idmendingo);
@@ -117,13 +117,17 @@ public class MapInteractor implements Map.Interactor {
             public void onResponse(Call<Helpless> call, Response<Helpless> response) {
 
                 if(response!=null&&response.raw()!=null&& response.raw().code()==200){
-                    Helpless Helpless = response.body();
+                    Helpless helpless = response.body();
+                    helpless.setIdmendingo(idmendingo);
+                    if(idmendingo!=null){
+                        presenter.updateHelp(helpless);
+                    }
                     presenter.showSentHelpMessage();
                 }
                 else{
-                    presenter.showSentHelpMessage();
+//                    presenter.showSentHelpMessage();
                     Log.i("Retrofit Service","Erro : "+response.raw().code());
-//                    presenter.showMessage("Retrofit Service - Erro : "+response.raw().code());
+                    presenter.showMessage("Retrofit Service - Erro : "+response.raw().code());
                 }
             }
 

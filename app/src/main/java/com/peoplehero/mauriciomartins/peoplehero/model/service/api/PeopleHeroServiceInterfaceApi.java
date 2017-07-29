@@ -36,6 +36,6 @@ public interface PeopleHeroServiceInterfaceApi {
     Call<HelpDTO> setHelpAsk(@Query("latitude") double latitude, @Query("longitude") double longitude);
 
     @Headers("Content-Type: application/json")
-    @POST("setConfirmHelp.php")
+    @POST("confirmHelp.php")
     Call<Helpless> setConfirmHelp(@Body Helpless helpless);
 }
