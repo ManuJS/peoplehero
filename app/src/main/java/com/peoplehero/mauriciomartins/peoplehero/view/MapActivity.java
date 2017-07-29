@@ -95,7 +95,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
             this.showProgress(true);
             long tempo = 1000 * 5;//5 minutos
             float distancia = 10; // 30 metros
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , tempo , distancia,  new LocationListener() {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER , tempo , distancia,  new LocationListener() {
 
                 @Override
                 public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
@@ -321,7 +321,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_No_Border);
             final LayoutInflater inflater = getActivity().getLayoutInflater();
             final View view = inflater.inflate(R.layout.dialog_sent_help, null);
             view.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
