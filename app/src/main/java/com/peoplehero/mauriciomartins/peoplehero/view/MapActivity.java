@@ -15,6 +15,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
@@ -47,7 +48,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapActivity extends AbstractActivity implements Map.View, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private Map.Presenter presenter;
     private GoogleMap mMap;
-    private  boolean isFirstTime=true;
+    private boolean isFirstTime = true;
     public static final String UID = "UID";
     public static final String IDUSER = "IDUSER";
     private MapModelView viewModel;
@@ -62,9 +63,9 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         this.presenter = new MapPresenter(this);
-        final int iduser    = getIntent().getIntExtra(MapActivity.IDUSER,0);
-        final String uid    = getIntent().getStringExtra(MapActivity.UID);
-        this.presenter.saveUserInfo(iduser,uid);
+        final int iduser = getIntent().getIntExtra(MapActivity.IDUSER, 0);
+        final String uid = getIntent().getStringExtra(MapActivity.UID);
+        this.presenter.saveUserInfo(iduser, uid);
 
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
@@ -76,30 +77,31 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
     @Override
     protected void onStart() {
         super.onStart();
+        this.startGPSTracker();
+    }
 
+    private void startGPSTracker() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
+
             // Check Permissions Now
             final int REQUEST_LOCATION = 2;
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Display UI and wait for user interaction
-            } else {
-//                    ActivityCompat.requestPermissions(
-//                            this, new String[]{Manifest.permission.LOCATION_FINE},
-//                            Manifest.permission.ACCESS_FINE_LOCATION);
-            }
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+//                // Display UI and wait for user interaction
+//            } else {
+                ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },
+                        REQUEST_LOCATION );
+//            }
         } else {
-            this.showProgress(true);
             long tempo = 1000 * 5;//5 minutos
             float distancia = 10; // 30 metros
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER , tempo , distancia,  new LocationListener() {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tempo, distancia, new LocationListener() {
 
                 @Override
                 public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-                   // Toast.makeText(getApplicationContext(), "Status alterado:"+arg0+" - "+arg1, Toast.LENGTH_LONG).show();
+                    // Toast.makeText(getApplicationContext(), "Status alterado:"+arg0+" - "+arg1, Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -114,26 +116,25 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
 
                 @Override
                 public void onLocationChanged(Location location) {
-                    if( location != null&&mMap!=null){
-                        Log.i("Location","Status alterado:"+location.getLatitude()+" - "+location.getLongitude());
+                    if (location != null && mMap != null) {
+                        Log.i("Location - Peoplehero", "Status alterado:" + location.getLatitude() + " - " + location.getLongitude());
                         mMap.clear();
                         presenter.saveLocation(location.getLatitude(), location.getLongitude());
                         final LatLng here = new LatLng(location.getLatitude(), location.getLongitude());
                         final BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
                         mMap.addMarker(new MarkerOptions().position(here).icon(icon).title(getString(R.string.im_here)));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
-                        if(isFirstTime) {
+                        if (isFirstTime) {
                             isFirstTime = false;
                             showProgress(true);
                             presenter.refresh();
-                        }else{
+                        } else {
                             presenter.update();
                         }
                     }
                 }
-            }, null );
+            }, null);
         }
-
     }
 
     @Override
@@ -161,14 +162,14 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
         view.setAlpha(0.7f);
         this.zoomImageFromThumb(view);
         final AskHelpDialog confirmHelpDialog = new AskHelpDialog(this.presenter);
-        confirmHelpDialog.show(this.getSupportFragmentManager(),"AskHelpDialog");
+        confirmHelpDialog.show(this.getSupportFragmentManager(), "AskHelpDialog");
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.setAlpha(1.0f);
             }
-        },2000);
+        }, 2000);
     }
 
 
@@ -189,6 +190,27 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
         mMap.setMinZoomPreference(13.0f);
         mMap.setMaxZoomPreference(16.0f);
         mMap.setOnMarkerClickListener(MapActivity.this);
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)==null?locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER):locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        if(lastKnownLocation!=null) {
+            final LatLng here = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+            final BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+            mMap.addMarker(new MarkerOptions().position(here).icon(icon).title(getString(R.string.im_here)));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
+        }
+        Log.i("Location - Peoplehero","Peoplehero onMapReady");
     }
 
     @Override
@@ -388,6 +410,14 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
     public void showProgress(boolean visible) {
         super.showProgress(visible);
         this.findViewById(R.id.btnRefresh).setVisibility(visible?View.INVISIBLE:View.VISIBLE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults!=null&&grantResults.length>0&&grantResults[0]==-1){
+            this.startGPSTracker();
+        }
     }
 }
 
