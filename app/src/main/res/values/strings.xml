@@ -32,4 +32,6 @@
     <string name="confirmation">Confirmação</string>
     <string name="dialog_help_subtitle_message">Clique em confirmar para finalizar</string>
     <string name="dialog_help_info">A confirmação só deve ser feita depois\nde completar a doação</string>
+    <string name="already_helped_here">Hero aqui!!</string>
+    <string name="facebook_url">com.facebook.katana</string>
 </resources>

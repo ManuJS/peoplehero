@@ -108,8 +108,8 @@ public class MapInteractor implements Map.Interactor {
     public void confirmHelp(final String idmendingo, String iduser) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
         final Helpless helpless =  new Helpless();
-        helpless.setIdmendingo(idmendingo);
-        helpless.setIduser(iduser);
+        helpless.setIdmendingo("25");
+        helpless.setIduser("25");
         Call<Helpless> repos = peopleHeroService.confirmHelp(helpless);
 
         repos.enqueue(new Callback<Helpless>() {

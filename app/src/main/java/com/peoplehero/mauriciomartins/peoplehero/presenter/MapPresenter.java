@@ -109,6 +109,11 @@ public class MapPresenter implements Map.Presenter {
         }
     }
 
+    @Override
+    public void openCamera() {
+        this.view.openCamera();
+    }
+
 
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);

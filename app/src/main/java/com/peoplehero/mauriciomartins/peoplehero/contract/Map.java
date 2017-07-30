@@ -20,6 +20,8 @@ public interface Map {
         void route(String latitude, String longitude);
         void showNotification(int notificationId, String notificationTitle, String notificationIfo);
         void showSentHelpMessage();
+
+        void openCamera();
     }
 
     static interface Presenter{
@@ -37,6 +39,9 @@ public interface Map {
         void showSentHelpMessage();
         void showProgress(boolean visible);
         void updateHelp(Helpless idmendingo);
+
+        void openCamera();
+
     }
 
     static interface Interactor{
