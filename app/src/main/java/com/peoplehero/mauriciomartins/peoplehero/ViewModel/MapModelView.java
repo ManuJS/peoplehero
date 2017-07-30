@@ -30,7 +30,7 @@ public class MapModelView extends ViewModel {
        this.points = new ArrayList<>();
        if (helpList != null) {
            for (Helpless helpless : helpList) {
-               final double distance = 50;//presenter.distance(currentLatitude,currentLongitude,Double.valueOf(helpless.getLatitude()),Double.valueOf(helpless.getLongitude()))*1000;
+               final double distance = presenter.distance(currentLatitude,currentLongitude,Double.valueOf(helpless.getLatitude()),Double.valueOf(helpless.getLongitude()))*1000;
                final LatLng here     = new LatLng(Double.valueOf(helpless.getLatitude()), Double.valueOf(helpless.getLongitude()));
                float markerIcon      = BitmapDescriptorFactory.HUE_GREEN;
                BitmapDescriptor icon = null;
