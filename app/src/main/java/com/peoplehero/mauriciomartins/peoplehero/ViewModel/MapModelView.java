@@ -30,19 +30,11 @@ public class MapModelView extends ViewModel {
        this.points = new ArrayList<>();
        if (helpList != null) {
            for (Helpless helpless : helpList) {
-               final double distance = 50;//presenter.distance(currentLatitude,currentLongitude,Double.valueOf(helpless.getLatitude()),Double.valueOf(helpless.getLongitude()))*1000;
-               //final double distance = presenter.distance(-23.9178,-47.0586,-24.1428,-47.1567)*1000;
-
-               LatLng here = new LatLng(Double.valueOf(helpless.getLatitude()), Double.valueOf(helpless.getLongitude()));
-//               distance<1000?BitmapDescriptorFactory.HUE_YELLOW:BitmapDescriptorFactory.HUE_GREEN;
-
-
-               float markerIcon = BitmapDescriptorFactory.HUE_GREEN;
+               final double distance = presenter.distance(currentLatitude,currentLongitude,Double.valueOf(helpless.getLatitude()),Double.valueOf(helpless.getLongitude()))*1000;
+               final LatLng here     = new LatLng(Double.valueOf(helpless.getLatitude()), Double.valueOf(helpless.getLongitude()));
+               float markerIcon      = BitmapDescriptorFactory.HUE_GREEN;
                BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(markerIcon);
-//               BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.pino);
                if(helpless.getContadorAjuda()>0){
-//                   markerIcon = BitmapDescriptorFactory.HUE_GREEN;
-//                   icon = BitmapDescriptorFactory.defaultMarker(markerIcon);
                    icon = BitmapDescriptorFactory.fromResource(R.mipmap.pino);
                }else if(distance<100){
                    int notificationId      =  100;

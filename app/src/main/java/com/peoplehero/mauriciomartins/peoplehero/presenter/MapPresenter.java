@@ -73,10 +73,9 @@ public class MapPresenter implements Map.Presenter {
     }
 
     @Override
-    public double distance(double D2, double E2, double D3, double E3) {
+    public double distance(double fromLatitude, double fromLongitude, double toLatitude, double toLongitude) {
         final int R = 6371; // Radius of the earth
-        //return R*Math.cos(Math.cos(Math.PI*(90-D3)/180)*Math.cos((90-D2)*Math.PI/180)+Math.sin((90-D3)*Math.PI/180)*Math.sin((90-D2)*Math.PI/180)*Math.cos((E2-E3)*Math.PI/180));
-        return R*Math.acos(Math.cos(Math.PI*(90-D3)/180)*Math.cos((90-D2)*Math.PI/180)+Math.sin((90-D3)*Math.PI/180)*Math.sin((90-D2)*Math.PI/180)*Math.cos((E2-E3)*Math.PI/180));
+        return R*Math.acos(Math.cos(Math.PI*(90-toLatitude)/180)*Math.cos((90-fromLatitude)*Math.PI/180)+Math.sin((90-toLatitude)*Math.PI/180)*Math.sin((90-fromLatitude)*Math.PI/180)*Math.cos((fromLongitude-toLongitude)*Math.PI/180));
     }
 
     @Override
