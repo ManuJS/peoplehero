@@ -11,6 +11,14 @@ public class Helpless {
     private String longitude;
     private int contadorAjuda;
 
+    public Helpless(){
+
+    }
+
+    public Helpless(String idmendingo){
+            this.idmendingo = idmendingo;
+    }
+
     public String getIdmendingo() {
         return idmendingo;
     }

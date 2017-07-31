@@ -52,7 +52,13 @@ public class MapPresenter implements Map.Presenter {
     @Override
     public void confirmHelp(String idmendingo) {
         this.view.showProgress(true);
-        this.interactor.confirmHelp(idmendingo, String.valueOf(iduser));
+
+        final int index = this.helplessList.indexOf(new Helpless(idmendingo));
+        if(index>-1) {
+            final Helpless helpless = this.helplessList.get(index);
+            helpless.setIduser(String.valueOf(this.iduser));
+            this.interactor.confirmHelp(helpless);
+        }
     }
 
     @Override

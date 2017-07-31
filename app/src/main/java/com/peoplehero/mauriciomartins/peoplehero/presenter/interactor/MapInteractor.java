@@ -8,6 +8,8 @@ import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelpDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.dto.HelplessListDTO;
 import com.peoplehero.mauriciomartins.peoplehero.model.service.PeopleHeroService;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -105,11 +107,8 @@ public class MapInteractor implements Map.Interactor {
     }
 
     @Override
-    public void confirmHelp(final String idmendingo, String iduser) {
+    public void confirmHelp(Helpless helpless) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
-        final Helpless helpless =  new Helpless();
-        helpless.setIdmendingo(idmendingo);
-        helpless.setIduser(iduser);
         Call<Helpless> repos = peopleHeroService.confirmHelp(helpless);
 
         repos.enqueue(new Callback<Helpless>() {
@@ -118,8 +117,7 @@ public class MapInteractor implements Map.Interactor {
 
                 if(response!=null&&response.raw()!=null&& response.raw().code()==200){
                     Helpless helpless = response.body();
-                    helpless.setIdmendingo(idmendingo);
-                    if(idmendingo!=null){
+                    if(helpless!=null){
                         presenter.updateHelp(helpless);
                     }
                     presenter.showSentHelpMessage();

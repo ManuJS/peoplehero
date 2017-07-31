@@ -52,6 +52,6 @@ public interface Map {
 
         void confirmHelp(Long latitude, Long longitude, Long idUser);
 
-        void confirmHelp(String idmendingo, String iduser);
+        void confirmHelp(Helpless helpless);
     }
 }

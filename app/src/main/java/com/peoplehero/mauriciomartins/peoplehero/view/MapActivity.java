@@ -108,7 +108,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
         } else {
             long tempo = 1000 * 5;//5 minutos
             float distancia = 10; // 30 metros
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, tempo, distancia, new LocationListener() {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tempo, distancia, new LocationListener() {
 
                 @Override
                 public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
@@ -130,18 +130,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
                     if (location != null && mMap != null) {
                         Log.i("Location - Peoplehero", "Status alterado:" + location.getLatitude() + " - " + location.getLongitude());
                         mMap.clear();
-                        presenter.saveLocation(location.getLatitude(), location.getLongitude());
-                        final LatLng here = new LatLng(location.getLatitude(), location.getLongitude());
-                        final BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-                        mMap.addMarker(new MarkerOptions().position(here).icon(icon).title(getString(R.string.im_here)));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
-                        if (isFirstTime) {
-                            isFirstTime = false;
-                            showProgress(true);
-                            presenter.refresh();
-                        } else {
-                            presenter.update();
-                        }
+                        showMyCurrentPosition(location.getLatitude(),location.getLongitude());
                     }
                 }
             }, null);
@@ -211,13 +200,25 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
         } else {
             final Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)==null?locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER):locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if(lastKnownLocation!=null) {
-                final LatLng here = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                final BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-                mMap.addMarker(new MarkerOptions().position(here).icon(icon).title(getString(R.string.im_here)));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
+                this.showMyCurrentPosition(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
             }
         }
         Log.i("Location - Peoplehero","Peoplehero onMapReady");
+    }
+
+    private void showMyCurrentPosition(double latitude, double longitude) {
+        this.presenter.saveLocation(latitude, longitude);
+        final LatLng here = new LatLng(latitude, longitude);
+        final BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+        this.mMap.addMarker(new MarkerOptions().position(here).icon(icon).title(getString(R.string.im_here)));
+        this.mMap.moveCamera(CameraUpdateFactory.newLatLng(here));
+        if (isFirstTime) {
+            isFirstTime = false;
+            showProgress(true);
+            presenter.refresh();
+        } else {
+            presenter.update();
+        }
     }
 
     @Override
