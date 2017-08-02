@@ -7,16 +7,20 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -51,6 +55,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -59,8 +64,11 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static android.os.Build.VERSION_CODES.M;
+
 public class MapActivity extends AbstractActivity implements Map.View, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private static final int REQUEST_TAKE_PHOTO = 100;
+    private static final int REQUEST_CROP_ICON = 200;
     private Map.Presenter presenter;
     private GoogleMap mMap;
     private boolean isFirstTime = true;
@@ -187,8 +195,8 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMinZoomPreference(13.0f);
-        mMap.setMaxZoomPreference(16.0f);
+//        mMap.setMinZoomPreference(13.0f);
+//        mMap.setMaxZoomPreference(16.0f);
         mMap.setOnMarkerClickListener(MapActivity.this);
         final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -473,18 +481,36 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            // Show the thumbnail on ImageView
             Uri imageUri = Uri.parse(mCurrentPhotoPath);
             File file = new File(imageUri.getPath());
             try {
                 final String packageName =  this.getString(R.string.facebook_url);
                 if (this.appInstalledOrNot(packageName)) {
-                    final InputStream ims = new FileInputStream(file);
-                    final Bitmap bitmap = BitmapFactory.decodeStream(ims);
-                    this.shareOnFacebook(bitmap);
+                    BitmapFactory.Options bounds = new BitmapFactory.Options();
+                    bounds.inJustDecodeBounds = true;
+                    BitmapFactory.decodeFile(file.getAbsolutePath(), bounds);
+
+                    BitmapFactory.Options opts = new BitmapFactory.Options();
+                    Bitmap bm = BitmapFactory.decodeFile(file.getAbsolutePath(), opts);
+                    ExifInterface exif = new ExifInterface(file.getAbsolutePath());
+                    String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+                    int orientation = orientString != null ? Integer.parseInt(orientString) :  ExifInterface.ORIENTATION_NORMAL;
+
+                    int rotationAngle = 0;
+                    if (orientation == ExifInterface.ORIENTATION_ROTATE_90) rotationAngle = 90;
+                    if (orientation == ExifInterface.ORIENTATION_ROTATE_180) rotationAngle = 180;
+                    if (orientation == ExifInterface.ORIENTATION_ROTATE_270) rotationAngle = 270;
+
+                    Matrix matrix = new Matrix();
+                    matrix.setRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+                    Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight, matrix, true);
+
+                    this.shareOnFacebook(rotatedBitmap);
                 }
             } catch (FileNotFoundException e) {
                 return;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             // ScanFile so it will be appeared on Gallery
@@ -494,6 +520,36 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
                         public void onScanCompleted(String path, Uri uri) {
                         }
                     });
+        }else if (requestCode == REQUEST_CROP_ICON && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            if(extras != null ) {
+                Bitmap photo = extras.getParcelable("data");
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.JPEG, 75, stream);
+                this.shareOnFacebook(photo);
+            }
+
+//
+//            Uri imageUri = Uri.parse(mCurrentPhotoPath);
+//            File file = new File(imageUri.getPath());
+//            try {
+//                final String packageName =  this.getString(R.string.facebook_url);
+//                if (this.appInstalledOrNot(packageName)) {
+//                    final InputStream ims = new FileInputStream(file);
+//                    final Bitmap bitmap = BitmapFactory.decodeStream(ims);
+//                    this.shareOnFacebook(bitmap);
+//                }
+//            } catch (FileNotFoundException e) {
+//                return;
+//            }
+//
+//            // ScanFile so it will be appeared on Gallery
+//            MediaScannerConnection.scanFile(MapActivity.this,
+//                    new String[]{imageUri.getPath()}, null,
+//                    new MediaScannerConnection.OnScanCompletedListener() {
+//                        public void onScanCompleted(String path, Uri uri) {
+//                        }
+//                    });
         }
     }
 
@@ -537,6 +593,67 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
         }
     }
 
+
+    private void cropImage(File file) {
+        final int width  = 400;
+        final int height = 200;
+
+        try {
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+
+            Uri contentUri;
+
+            if(Build.VERSION.SDK_INT > M){
+
+                contentUri = FileProvider.getUriForFile(MapActivity.this,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        file);
+
+                //TODO:  Permission..
+
+                getApplicationContext().grantUriPermission("com.android.camera",
+                        contentUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                cropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+            }else{
+
+                contentUri = Uri.fromFile(file);
+
+            }
+
+            cropIntent.setDataAndType(contentUri, "image/*");
+            cropIntent.putExtra("crop", "true");
+            cropIntent.putExtra("aspectX", 2);
+            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("outputX", width);
+            cropIntent.putExtra("outputY", height);
+
+            cropIntent.putExtra("return-data", true);
+            startActivityForResult(cropIntent, REQUEST_CROP_ICON);
+
+        }catch (ActivityNotFoundException a) {
+            Log.e("Activity Not Found",""+a.toString());
+        }
+    }
+
+//    private void cropImage(Uri imageUri){
+//        Intent intent = new Intent("com.android.camera.action.CROP");
+//        intent.setClassName("com.android.camera", "com.android.camera.CropImage");
+////        File file = new File(filePath);
+////        Uri uri = Uri.fromFile(file);
+//        intent.setData(imageUri);
+//        intent.putExtra("crop", "true");
+//        intent.putExtra("aspectX", 1);
+//        intent.putExtra("aspectY", 1);
+//        intent.putExtra("outputX", 96);
+//        intent.putExtra("outputY", 96);
+//        intent.putExtra("noFaceDetection", true);
+//        intent.putExtra("return-data", true);
+//        startActivityForResult(intent, REQUEST_CROP_ICON);
+//    }
     public boolean appInstalledOrNot(String uri) {
         PackageManager pm = getPackageManager();
         boolean app_installed = false;
