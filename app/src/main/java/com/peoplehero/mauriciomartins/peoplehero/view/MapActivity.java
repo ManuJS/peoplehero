@@ -196,7 +196,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 //        mMap.setMinZoomPreference(13.0f);
-//        mMap.setMaxZoomPreference(16.0f);
+//        mMap.setMaxZoomPreference(20.0f);
         mMap.setOnMarkerClickListener(MapActivity.this);
         final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -415,15 +415,25 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
 
     @Override
     public void openCamera() {
-        final String packageName =  this.getString(R.string.facebook_url);
-        if(this.appInstalledOrNot(packageName)){
-            try {
-                dispatchTakePictureIntent();
-            } catch (IOException e) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED||ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
 
+            // Check Permissions Now
+            final int REQUEST_CAMERA = 3;
+            ActivityCompat.requestPermissions( this, new String[] {  Manifest.permission.CAMERA , Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                    REQUEST_CAMERA );
+        } else {
+            final String packageName = this.getString(R.string.facebook_url);
+            if (this.appInstalledOrNot(packageName)) {
+                try {
+                    dispatchTakePictureIntent();
+                } catch (IOException e) {
+
+                }
+            } else {
+                this.openAppOnGoogleplay(packageName);
             }
-        }else{
-            this.openAppOnGoogleplay(packageName);
         }
     }
 
