@@ -55,9 +55,9 @@ public class MapInteractor implements Map.Interactor {
     }
 
     @Override
-    public void setHelpAsk(double latitude, double longitude) {
+    public void setHelpAsk(Long idUser,double latitude, double longitude) {
         PeopleHeroService peopleHeroService = new PeopleHeroService();
-        Call<HelpDTO> repos = peopleHeroService.setHelpAsk(latitude,longitude);
+        Call<HelpDTO> repos = peopleHeroService.setHelpAsk(idUser ,latitude,longitude);
         repos.enqueue(new Callback<HelpDTO>() {
             @Override
             public void onResponse(Call<HelpDTO> call, Response<HelpDTO> response) {
@@ -65,32 +65,6 @@ public class MapInteractor implements Map.Interactor {
                 if(response!=null&&response.raw()!=null&& response.raw().code()==200){
                     HelpDTO help = response.body();
                     presenter.showMessage("Pedido de ajuda realizado com sucesso!!!");
-                }
-                else{
-                    Log.i("Retrofit Service","Erro : "+response.raw().code());
-                    presenter.showMessage("Retrofit Service - Erro : "+response.raw().code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<HelpDTO> call, Throwable t) {
-                Log.i("Retrofit Service","Response:"+t.getMessage());
-                presenter.showMessage("Retrofit Service - Response:"+t.getMessage());
-            }
-        });
-    }
-
-    @Override
-    public void confirmHelp(Long latitude, Long longitude, final Long idUser) {
-        PeopleHeroService peopleHeroService = new PeopleHeroService();
-        Call<HelpDTO> repos = peopleHeroService.setHelpAsk(latitude,longitude);
-        repos.enqueue(new Callback<HelpDTO>() {
-            @Override
-            public void onResponse(Call<HelpDTO> call, Response<HelpDTO> response) {
-
-                if(response!=null&&response.raw()!=null&& response.raw().code()==200){
-                    HelpDTO help = response.body();
-                    presenter.showMessage("Ajuda realizada com sucesso!!!");
                 }
                 else{
                     Log.i("Retrofit Service","Erro : "+response.raw().code());

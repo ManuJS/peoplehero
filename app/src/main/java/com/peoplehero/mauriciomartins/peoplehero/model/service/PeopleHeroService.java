@@ -25,8 +25,13 @@ public class PeopleHeroService {
 
     private PeopleHeroServiceInterfaceApi service = retrofit.create(PeopleHeroServiceInterfaceApi.class);
 
-    public Call<HelpDTO> setHelpAsk(double latitude, double longitude){
-        Call<HelpDTO> repos = service.setHelpAsk(latitude, longitude);
+    public Call<HelpDTO> setHelpAsk(Long idUser, double latitude, double longitude){
+        PeopleHeroService peopleHeroService = new PeopleHeroService();
+        User user = new User();
+        user.setIduser(String.valueOf(idUser));
+        user.setLatitude(String.valueOf(latitude));
+        user.setLongitude(String.valueOf(longitude));
+        Call<HelpDTO> repos = service.setHelpAsk(user);
         return repos;
     }
 

@@ -31,7 +31,7 @@ public interface Map {
         void updateHelpless(List<Helpless> helplessList);
         void confirmHelp(String idmendingo);
         void saveLocation(double latitude, double longitude);
-        void saveUserInfo(int iduser, String uid);
+        void saveUserInfo(Long iduser, String uid);
         void route(String latitude, String longitude);
         double distance(double D2, double D3, double E2, double E3);
         void update();
@@ -39,18 +39,15 @@ public interface Map {
         void showSentHelpMessage();
         void showProgress(boolean visible);
         void updateHelp(Helpless idmendingo);
-
         void openCamera();
 
     }
 
     static interface Interactor{
 
-        void setHelpAsk(double latitude, double longitude);
+        void setHelpAsk(Long idUser,double latitude, double longitude);
 
         void refresh(double latitude, double longitude, double idUser);
-
-        void confirmHelp(Long latitude, Long longitude, Long idUser);
 
         void confirmHelp(Helpless helpless);
     }

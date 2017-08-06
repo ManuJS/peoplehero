@@ -113,7 +113,7 @@ public class LoginActivity extends AbstractActivity implements Login.View {
         Log.i("LoginActivity","Usuário cadastrado com sucesso!!!"+user);
         Intent intent = new Intent(this,MapActivity.class);
         final Bundle params = new Bundle();
-        intent.putExtra(MapActivity.IDUSER,Integer.valueOf(user.getIduser()));
+        intent.putExtra(MapActivity.IDUSER,Long.valueOf(user.getIduser()));
         intent.putExtra(UID,user.getUid());
         startActivity(intent);
         this.finish();

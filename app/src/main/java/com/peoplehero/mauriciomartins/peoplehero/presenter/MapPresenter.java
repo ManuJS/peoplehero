@@ -17,7 +17,7 @@ public class MapPresenter implements Map.Presenter {
     private Map.View view;
     private double latitude;
     private double longitude;
-    private int iduser;
+    private Long iduser;
     private String uid;
     private List<Helpless> helplessList;
 
@@ -28,7 +28,7 @@ public class MapPresenter implements Map.Presenter {
     @Override
     public void setHelpAsk() {
         this.view.showProgress(true);
-        this.interactor.setHelpAsk(latitude,longitude);
+        this.interactor.setHelpAsk(this.iduser,latitude,longitude);
 
     }
 
@@ -68,7 +68,7 @@ public class MapPresenter implements Map.Presenter {
     }
 
     @Override
-    public void saveUserInfo(int iduser, String uid) {
+    public void saveUserInfo(Long iduser, String uid) {
         this.iduser = iduser;
         this.uid    = uid;
     }

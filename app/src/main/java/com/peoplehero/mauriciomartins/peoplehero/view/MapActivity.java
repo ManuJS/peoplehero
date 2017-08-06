@@ -87,7 +87,7 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         this.presenter = new MapPresenter(this);
-        final int iduser = getIntent().getIntExtra(MapActivity.IDUSER, 0);
+        final Long iduser = getIntent().getLongExtra(MapActivity.IDUSER, 0);
         final String uid = getIntent().getStringExtra(MapActivity.UID);
         this.presenter.saveUserInfo(iduser, uid);
 
@@ -195,8 +195,8 @@ public class MapActivity extends AbstractActivity implements Map.View, OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMinZoomPreference(13.0f);
-        mMap.setMaxZoomPreference(20.0f);
+//        mMap.setMinZoomPreference(13.0f);
+//        mMap.setMaxZoomPreference(20.0f);
         mMap.setOnMarkerClickListener(MapActivity.this);
         final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
